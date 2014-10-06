@@ -27,7 +27,7 @@ public class Land {
 		polygon.setFill(defaultColor);
 	}
 
-	{
+	{		// I don't get these brackets
 		this.polygon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				System.out.println("MOUSE CLICKED ON " + name);
@@ -36,6 +36,6 @@ public class Land {
 				nextColor = tempColor;
 			}
 		});
-	};
+	};		// I don't get these brackets
 
 }

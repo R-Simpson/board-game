@@ -1,8 +1,10 @@
-package com.websocketgame.got;
+package com.websocketgame.socketTest;
 
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+
+import com.websocketgame.drawing.GameBoard;
 
 public class Client {
 
@@ -15,15 +17,19 @@ public class Client {
 		System.out.println("Connecting...");
 		socket = new Socket("localhost",7777);
 		System.out.println("Connected");
+		
 		in = new DataInputStream(socket.getInputStream());
 		out = new DataOutputStream(socket.getOutputStream());
+		
 		Input input = new Input(in);
 		Thread thread = new Thread(input);
 		thread.start();
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter your name");
 		String name = sc.nextLine();
 		out.writeUTF(name);
+		
 		while(true)
 		{
 			String sendMessage = sc.nextLine();
