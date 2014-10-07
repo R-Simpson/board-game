@@ -44,43 +44,38 @@ class Users implements Runnable{
 	DataInputStream in;
 	Users[] user = new Users[6];
 	String name;
-/*	
-	int playerid;
-	int playeridin;
-	int xin;
-	int yin;
-*/
+	
+	int playerId;
+	int remotePlayerId;
+	int moveIn;
+
+
 	
 	public Users(DataOutputStream out, DataInputStream in, Users[] user, int pid) {
 		this.out = out;
 		this.in = in;
 		this.user = user;
-	//	this.playerid = pid;
+		this.playerId = pid;
 	}
 
 	public void run() {
 		try {
-			name = in.readUTF();
-		//	out.writeInt(playerid);
+			out.writeInt(playerId);
 		} catch (IOException e1) {
 			System.out.println("Failed to send PlayerId");
 		}
 		while(true)
 		{
 			try {
-				String message = in.readUTF();
-//				playeridin = in.readInt();
-//				xin = in.readInt();
-//				yin = in.readInt();
-
+				remotePlayerId = in.readInt();
+				moveIn = in.readInt();
+				
 				for(int i = 0; i < 6; i++)
 				{
 					if(user[i] != null)
 					{
-						user[i].out.writeUTF(name + ": " + message);
-//						user[i].out.writeInt(playeridin);
-//						user[i].out.writeInt(xin);
-//						user[i].out.writeInt(yin);
+						user[i].out.writeInt(remotePlayerId);
+						user[i].out.writeInt(moveIn);
 					}
 				}
 

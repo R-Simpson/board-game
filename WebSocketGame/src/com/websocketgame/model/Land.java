@@ -1,4 +1,4 @@
-package com.websocketgame.drawing;
+package com.websocketgame.model;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -14,7 +14,7 @@ public class Land {
 
 	public Polygon polygon = new Polygon();
 
-	public String name;
+	private String name;
 
 	public Color defaultColor;
 
@@ -26,6 +26,17 @@ public class Land {
 		this.defaultColor = defaultColor;
 		polygon.setFill(defaultColor);
 	}
+	
+	public String getLandName()
+	{
+		return this.name;
+	}
+	
+	public Polygon getLand()
+	{
+		return polygon;
+	}
+	
 
 	{		// I don't get these brackets
 		this.polygon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {

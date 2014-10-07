@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
-import com.websocketgame.drawing.GameBoard;
+import com.websocketgame.view.GameBoard;
 
 public class Client {
 
