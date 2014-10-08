@@ -1,9 +1,13 @@
-package com.websocketgame.socketTest;
+package gamescratch;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import com.websocketgame.model.Continent;
+import javafx.scene.paint.Color;
+
 
 public class Server {
 
@@ -11,7 +15,8 @@ public class Server {
 	static Socket socket;
 	static DataOutputStream out;
 	static DataInputStream in;
-	static Users[] user = new Users[6];
+	static ServerLand[] lands = new ServerLand[6];	// 6 lands
+	static User[] user = new User[3];	// 3 players
 
 	public static void main(String[] args) throws Exception
 	{
@@ -19,12 +24,14 @@ public class Server {
 		serverSocket = new ServerSocket(7777);
 		System.out.println("Server Started...");
 		
-		Continent continent = new Continent();
+		List<ServerLand> lands = new ArrayList<ServerLand>(Arrays.asList(new ServerLand(1,1),new ServerLand(2,1),new ServerLand(3,2),new ServerLand(4,2),new ServerLand(5,3),new ServerLand(6,3)));	
+		// 6 lands divided up among the 3 players to start
+		
 		
 		while(true)
 		{
 			socket = serverSocket.accept();
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				System.out.println("Connection from " + socket.getInetAddress());
 				
@@ -33,7 +40,7 @@ public class Server {
 
 				if(user[i] == null)
 				{
-					user[i] = new Users(out, in, user, i);
+					user[i] = new User(out, in, user, i);
 					Thread thread = new Thread(user[i]);
 					thread.start();
 					break;
@@ -44,47 +51,51 @@ public class Server {
 }
 
 
-class Users implements Runnable{
+class User implements Runnable{
 
 	DataOutputStream out;
 	DataInputStream in;
-	Users[] user = new Users[6];
-	String name;
-	int playerId;
-	int opponent;
-	int moveIn;
+	User[] user = new User[3];
+	int assignid;
+	int playerid;
+	int move;
 
 
-	public Users(DataOutputStream out, DataInputStream in, Users[] user, int pid) {
+	public User(DataOutputStream out, DataInputStream in, User[] user, int assignid) {
 		this.out = out;
 		this.in = in;
 		this.user = user;
-		this.playerId = pid;
+		this.assignid = assignid;
 	}
 
 	public void run() {
 		try {
-			out.writeInt(playerId);
+			out.writeInt(assignid);
+			for (ServerLand land : lands)
+			{
+				
+			}
+			
 		} catch (IOException e1) {
 			System.out.println("Failed to send PlayerId");
 		}
 		while(true)
 		{
 			try {
-				opponent = in.readInt();
-				moveIn = in.readInt();
+				playerid = in.readInt();
+				move = in.readInt();
 				
-				for(int i = 0; i < 6; i++)
+				for(int i = 0; i < 3; i++)
 				{
 					if(user[i] != null)
 					{
-						user[i].out.writeInt(opponent);
-						user[i].out.writeInt(moveIn);
+						user[i].out.writeInt(playerid);
+						user[i].out.writeInt(move);
 					}
 				}
 
 			} catch (IOException e) {
-				user[playerId] = null;
+				user[assignid] = null;
 
 			}
 		}

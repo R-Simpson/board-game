@@ -1,4 +1,4 @@
-package com.websocketgame.model;
+package gamescratch;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -10,17 +10,15 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
-public class Land {
+public class ClientLand {
 
 	public Polygon polygon = new Polygon();
+	private int name;
+	private Color defaultColor;
 
-	private String name;
 
-	public Color defaultColor;
 
-	private Color nextColor = Color.WHITE;
-
-	public Land(String name, Color defaultColor)
+	public ClientLand(int name, Color defaultColor)
 	{
 		this.name = name;
 		this.defaultColor = defaultColor;
@@ -28,7 +26,7 @@ public class Land {
 		polygon.setStroke(Color.BLACK);
 	}
 	
-	public String getLandName()
+	public int getLandName()
 	{
 		return this.name;
 	}
@@ -42,9 +40,8 @@ public class Land {
 		this.polygon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
 				System.out.println("MOUSE CLICKED ON " + name);
-				Color tempColor = (Color) polygon.getFill();
-				polygon.setFill(nextColor);
-				nextColor = tempColor;
+				polygon.setFill(Color.BLACK);
+
 			}
 		});
 	};		// I don't get these brackets
