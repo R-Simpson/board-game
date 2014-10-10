@@ -1,12 +1,9 @@
-/* 
 package com.websocketgame.socketTest;
 
 import java.io.*;
 import java.net.*;
 
-import com.websocketgame.model.Continent;
-
-public class Server {
+public class Server2 {
 
 	static ServerSocket serverSocket;
 	static Socket socket;
@@ -14,23 +11,20 @@ public class Server {
 	static ObjectInputStream in;
 	static Users[] user = new Users[6];
 
+	
 	public static void main(String[] args) throws Exception
 	{
 		System.out.println("Starting Server...");
 		serverSocket = new ServerSocket(7777);
 		System.out.println("Server Started...");
-		
-		Continent continent = new Continent();
-		
 		while(true)
 		{
 			socket = serverSocket.accept();
 			for (int i = 0; i < 6; i++)
 			{
 				System.out.println("Connection from " + socket.getInetAddress());
-				
-				out = new DataOutputStream(socket.getOutputStream());
-				in = new DataInputStream(socket.getInputStream());
+				out = new ObjectOutputStream(socket.getOutputStream());
+				in = new ObjectInputStream(socket.getInputStream());
 
 				if(user[i] == null)
 				{
@@ -47,48 +41,43 @@ public class Server {
 
 class Users implements Runnable{
 
-	DataOutputStream out;
-	DataInputStream in;
+	ObjectOutputStream out;
+	ObjectInputStream in;
 	Users[] user = new Users[6];
-	String name;
-	int playerId;
-	int opponent;
-	int moveIn;
+	int pid;
 
-
-	public Users(DataOutputStream out, DataInputStream in, Users[] user, int pid) {
+	
+	public Users(ObjectOutputStream out, ObjectInputStream in, Users[] user, int pid) {
 		this.out = out;
 		this.in = in;
 		this.user = user;
-		this.playerId = pid;
+		this.pid = pid;
 	}
 
 	public void run() {
-		try {
-			out.writeInt(playerId);
-		} catch (IOException e1) {
-			System.out.println("Failed to send PlayerId");
-		}
 		while(true)
 		{
 			try {
-				opponent = in.readInt();
-				moveIn = in.readInt();
+				PlayerMessage test = (PlayerMessage)in.readObject();
 				
-				for(int i = 0; i < 6; i++)
+				PlayerOrder[] orders = test.getOrders();
+				
+				System.out.println("Message received from player " + test.getPlayerId() + " with chat message :" + test.getChat());
+				
+				int orderNumber = 0;
+				for (PlayerOrder order : orders)
 				{
-					if(user[i] != null)
-					{
-						user[i].out.writeInt(opponent);
-						user[i].out.writeInt(moveIn);
-					}
+					System.out.println("Order #" + ++orderNumber + " area: " + 	order.getAreaWhereOrderIsPlace() + " order Type: " + order.getOrderType());
 				}
 
 			} catch (IOException e) {
-				user[playerId] = null;
-
+				this.out = null;
+				this.in = null;
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
 }
-*/
+
