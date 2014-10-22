@@ -13,7 +13,7 @@ import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
 
-public class Client {
+public class ChatClient {
 
 	static Socket socket;
 	static DataInputStream in;
@@ -28,8 +28,8 @@ public class Client {
 		System.out.println("Connected");
 		
 		in = new DataInputStream(socket.getInputStream());
-		// int playerId = in.readInt();
-		// System.out.println("Player ID set as " + playerId);
+		int playerId = in.readInt();
+		System.out.println("Player ID set as " + playerId);
 		out = new DataOutputStream(socket.getOutputStream());
 		
 		Input input = new Input(in);
@@ -62,7 +62,9 @@ class Input implements Runnable{
 				message = in.readUTF();
 				System.out.println(message);
 			} catch (IOException e) {
+				System.out.println("Server Disconnected");
 				e.printStackTrace();
+				break;
 			}
 		}
 	}

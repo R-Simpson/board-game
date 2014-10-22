@@ -11,7 +11,7 @@ import java.util.List;
 import javafx.scene.paint.Color;
 
 
-public class Server {
+public class ChatServer {
 
 	static ServerSocket serverSocket;
 	static Socket socket;
@@ -52,39 +52,40 @@ class User implements Runnable{
 	DataInputStream in;
 	User[] user = new User[3];
 	String name;
-
-	public User(DataOutputStream out, DataInputStream in, User[] user, int assignid) {
+	int playerId;
+	int messageSenderId;
+	
+	public User(DataOutputStream out, DataInputStream in, User[] user, int playerId) {
 		this.out = out;
 		this.in = in;
 		this.user = user;
-		// this.assignid = assignid;
+		this.playerId = playerId;
+
 	}
 
 	public void run() {
 		try {
+			out.writeInt(playerId);
 			name = in.readUTF();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 		while(true)
 		{
 			try {
+				// messageSenderId = in.readInt();
 				String message = in.readUTF();
-				
 				for(int i = 0; i < 3; i++)
 				{
 					if(user[i] != null)
 					{
-						user[i].out.writeUTF(message);
+						user[i].out.writeInt(messageSenderId);
+						user[i].out.writeUTF(playerId + " " + name + " : " + message);
 					}
 				}
 
 			} catch (IOException e) {
-				this.out = null;
-				this.in = null;
-				// user[assignid] = null;
+				user[playerId] = null;
 
 			}
 		}
