@@ -58,23 +58,30 @@ class Users implements Runnable{
 		while(true)
 		{
 			try {
-				PlayerMessage test = (PlayerMessage)in.readObject();
+				PlayerMessage message = (PlayerMessage)in.readObject();
 				
-				PlayerOrder[] orders = test.getOrders();
+				PlayerOrder[] orders = message.getOrders();
 				
-				System.out.println("Message received from player " + test.getPlayerId() + " with chat message :" + test.getChat());
+				System.out.println("Message received from player " + message.getPlayerId() + " with chat message :" + message.getChat());
 				
 				int orderNumber = 0;
 				for (PlayerOrder order : orders)
 				{
 					System.out.println("Order #" + ++orderNumber + " area: " + 	order.getAreaWhereOrderIsPlace() + " order Type: " + order.getOrderType());
 				}
+				
+				for(int i = 0; i < 6; i++)
+				{
+					if(user[i] != null)
+					{
+						user[i].out.writeObject(message);
+					}
+				}
 
 			} catch (IOException e) {
-				this.out = null;
-				this.in = null;
+				user[pid] = null;
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+				System.out.println("Server received Object that was not PlayerMessage");
 				e.printStackTrace();
 			}
 		}

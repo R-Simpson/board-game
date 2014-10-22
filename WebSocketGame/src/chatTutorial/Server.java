@@ -1,4 +1,6 @@
-package gamescratch;
+package chatTutorial;
+
+import gamescratch.ServerLand;
 
 import java.io.*;
 import java.net.*;
@@ -15,8 +17,7 @@ public class Server {
 	static Socket socket;
 	static DataOutputStream out;
 	static DataInputStream in;
-	static ServerLand[] lands = new ServerLand[6];	// 6 lands
-	static User[] user = new User[3];	// 3 players
+	static User[] user = new User[3];
 
 	public static void main(String[] args) throws Exception
 	{
@@ -24,20 +25,14 @@ public class Server {
 		serverSocket = new ServerSocket(7777);
 		System.out.println("Server Started...");
 		
-		List<ServerLand> lands = new ArrayList<ServerLand>(Arrays.asList(new ServerLand(1,1),new ServerLand(2,1),new ServerLand(3,2),new ServerLand(4,2),new ServerLand(5,3),new ServerLand(6,3)));	
-		// 6 lands divided up among the 3 players to start
-		
-		
 		while(true)
 		{
 			socket = serverSocket.accept();
 			for (int i = 0; i < 3; i++)
 			{
 				System.out.println("Connection from " + socket.getInetAddress());
-				
 				out = new DataOutputStream(socket.getOutputStream());
 				in = new DataInputStream(socket.getInputStream());
-
 				if(user[i] == null)
 				{
 					user[i] = new User(out, in, user, i);
@@ -56,46 +51,40 @@ class User implements Runnable{
 	DataOutputStream out;
 	DataInputStream in;
 	User[] user = new User[3];
-	int assignid;
-	int playerid;
-	int move;
-
+	String name;
 
 	public User(DataOutputStream out, DataInputStream in, User[] user, int assignid) {
 		this.out = out;
 		this.in = in;
 		this.user = user;
-		this.assignid = assignid;
+		// this.assignid = assignid;
 	}
 
 	public void run() {
 		try {
-			out.writeInt(assignid);
-			for (ServerLand land : lands)
-			{
-				
-			}
-			
+			name = in.readUTF();
 		} catch (IOException e1) {
-			System.out.println("Failed to send PlayerId");
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+
 		while(true)
 		{
 			try {
-				playerid = in.readInt();
-				move = in.readInt();
+				String message = in.readUTF();
 				
 				for(int i = 0; i < 3; i++)
 				{
 					if(user[i] != null)
 					{
-						user[i].out.writeInt(playerid);
-						user[i].out.writeInt(move);
+						user[i].out.writeUTF(message);
 					}
 				}
 
 			} catch (IOException e) {
-				user[assignid] = null;
+				this.out = null;
+				this.in = null;
+				// user[assignid] = null;
 
 			}
 		}
