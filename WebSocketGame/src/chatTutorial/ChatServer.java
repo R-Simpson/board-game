@@ -86,7 +86,6 @@ class User implements Runnable{
 
 			} catch (IOException e) {
 				user[playerId] = null;
-
 			}
 		}
 	}
