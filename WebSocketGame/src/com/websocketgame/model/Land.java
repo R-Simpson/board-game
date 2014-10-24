@@ -14,23 +14,21 @@ public class Land {
 
 	public Polygon polygon = new Polygon();
 
-	private String name;
+	private int id;
+	private Color color;
 
-	public Color defaultColor;
-
-	private Color nextColor = Color.WHITE;
-
-	public Land(String name, Color defaultColor)
+	public Land(int id, Color color, Double[] boundaries)
 	{
-		this.name = name;
-		this.defaultColor = defaultColor;
-		polygon.setFill(defaultColor);
-		polygon.setStroke(Color.BLACK);
+		this.id = id;
+		this.color = color;
+		this.polygon.setFill(color);
+		this.polygon.setStroke(Color.BLACK);
+		this.polygon.getPoints().addAll(boundaries);
 	}
 	
-	public String getLandName()
+	public int getLandId()
 	{
-		return this.name;
+		return this.id;
 	}
 	
 	public Polygon getLand()
@@ -41,10 +39,9 @@ public class Land {
 	{		// I don't get these brackets
 		this.polygon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				System.out.println("MOUSE CLICKED ON " + name);
+				System.out.println("MOUSE CLICKED ON LAND " + id);
 				Color tempColor = (Color) polygon.getFill();
-				polygon.setFill(nextColor);
-				nextColor = tempColor;
+				polygon.setFill(Color.BLACK);
 			}
 		});
 	};		// I don't get these brackets
