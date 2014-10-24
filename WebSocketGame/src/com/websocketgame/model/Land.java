@@ -41,7 +41,7 @@ public class Land {
 			public void handle(MouseEvent e) {
 				System.out.println("MOUSE CLICKED ON LAND " + id);
 				Color tempColor = (Color) polygon.getFill();
-				polygon.setFill(Color.BLACK);
+				polygon.setFill(Color.RED);
 			}
 		});
 	};		// I don't get these brackets

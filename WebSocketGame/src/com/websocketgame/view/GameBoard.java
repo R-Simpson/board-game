@@ -17,7 +17,7 @@ public class GameBoard extends Application {
 		root.setMinSize(150, 150);
 		
 		Continent continent = new Continent();
-		List<Polygon> polyList = continent.getContinent();	
+		List<Polygon> polyList = continent.getBoard();	
 		root.getChildren().addAll(polyList);
 
 		stage.setScene(new Scene(root));
