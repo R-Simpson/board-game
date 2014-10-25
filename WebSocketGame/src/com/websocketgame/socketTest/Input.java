@@ -3,7 +3,7 @@ package com.websocketgame.socketTest;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-class Input implements Runnable{
+public class Input implements Runnable{
 
 	ObjectInputStream in;
 	Client client;

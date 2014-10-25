@@ -22,7 +22,7 @@ public class Users implements Runnable {
 	public void run() {
 		try {
 			System.out.println("Writing playerId to client");
-			out.writeInt(pid);
+			this.out.writeInt(pid);
 		} catch (IOException e1) {
 			System.out.println("Failed to write playerId to client");
 			e1.printStackTrace();
