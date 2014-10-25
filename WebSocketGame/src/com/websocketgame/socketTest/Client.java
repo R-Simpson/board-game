@@ -11,8 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
-import com.websocketgame.model.Continent;
-
 public class Client extends Application {
 
 	static Socket socket;
