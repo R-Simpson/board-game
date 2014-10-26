@@ -8,8 +8,8 @@ public class Server {
 
 	static ServerSocket serverSocket;
 	static Socket socket;
-	static ObjectOutputStream out;
-	static ObjectInputStream in;
+	static DataOutputStream out;
+	static DataInputStream in;
 	static Users[] user = new Users[6];
 	
 
@@ -25,8 +25,8 @@ public class Server {
 			for (int i = 0; i < 6; i++)
 			{
 				System.out.println("Connection from " + socket.getInetAddress());
-				out = new ObjectOutputStream(socket.getOutputStream());
-				in = new ObjectInputStream(socket.getInputStream());
+				out = new DataOutputStream(socket.getOutputStream());
+				in = new DataInputStream(socket.getInputStream());
 
 				if(user[i] == null)
 				{
