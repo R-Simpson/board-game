@@ -16,8 +16,8 @@ import javafx.stage.Stage;
 public class ChatClient {
 
 	static Socket socket;
-	static DataInputStream in;
-	static DataOutputStream out;
+	static ObjectInputStream in;
+	static ObjectOutputStream out;
 	
 	int playerId;
 	
@@ -27,10 +27,15 @@ public class ChatClient {
 		socket = new Socket("localhost",7777);
 		System.out.println("Connected");
 		
-		in = new DataInputStream(socket.getInputStream());
+
+		
+		in = new ObjectInputStream(socket.getInputStream());
 		int playerId = in.readInt();
 		System.out.println("Player ID set as " + playerId);
-		out = new DataOutputStream(socket.getOutputStream());
+		
+		out = new ObjectOutputStream(socket.getOutputStream());	
+		out.flush();
+
 		
 		Input input = new Input(in);
 		Thread thread = new Thread(input);
@@ -51,8 +56,8 @@ public class ChatClient {
 }
 
 class Input implements Runnable{
-	DataInputStream in;
-	public Input(DataInputStream in){
+	ObjectInputStream in;
+	public Input(ObjectInputStream in){
 		this.in = in;
 	}
 	public void run() {

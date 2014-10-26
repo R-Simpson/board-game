@@ -36,7 +36,7 @@ public class Client extends Application {
 		
 		// Set up input stream
 		 in = new ObjectInputStream(socket.getInputStream());
-		playerid = in.readInt();
+		// playerid = in.readInt();
 		
 		Input input = new Input(in, this);
 		Thread inputThread = new Thread(input);
@@ -70,7 +70,7 @@ public class Client extends Application {
 				public void handle(MouseEvent e) {
 					Color tempColor = (Color) land.polygon.getFill();
 					land.polygon.setFill(Color.RED);
-					System.out.println("Land " + land.getLandId() + " claimed");
+					System.out.println("Land " + land.getLandId() + " claimed by player " + playerid);
 				}
 			});
 		}

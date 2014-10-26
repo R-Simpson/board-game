@@ -26,6 +26,7 @@ public class Input implements Runnable{
 				{
 					System.out.println("Order #" + ++orderNumber + " area: " + 	order.getAreaWhereOrderIsPlace() + " order Type: " + order.getOrderType());
 				}
+				in.reset();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -34,6 +35,7 @@ public class Input implements Runnable{
 				e.printStackTrace();
 			}
 			
+
 		}
 	}
 }

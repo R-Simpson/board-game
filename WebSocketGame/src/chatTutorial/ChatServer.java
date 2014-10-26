@@ -15,8 +15,8 @@ public class ChatServer {
 
 	static ServerSocket serverSocket;
 	static Socket socket;
-	static DataOutputStream out;
-	static DataInputStream in;
+	static ObjectOutputStream out;
+	static ObjectInputStream in;
 	static User[] user = new User[3];
 
 	public static void main(String[] args) throws Exception
@@ -31,8 +31,8 @@ public class ChatServer {
 			for (int i = 0; i < 3; i++)
 			{
 				System.out.println("Connection from " + socket.getInetAddress());
-				out = new DataOutputStream(socket.getOutputStream());
-				in = new DataInputStream(socket.getInputStream());
+				out = new ObjectOutputStream(socket.getOutputStream());
+				in = new ObjectInputStream(socket.getInputStream());
 				if(user[i] == null)
 				{
 					user[i] = new User(out, in, user, i);
@@ -48,14 +48,14 @@ public class ChatServer {
 
 class User implements Runnable{
 
-	DataOutputStream out;
-	DataInputStream in;
+	ObjectOutputStream out;
+	ObjectInputStream in;
 	User[] user = new User[3];
 	String name;
 	int playerId;
 	int messageSenderId;
 	
-	public User(DataOutputStream out, DataInputStream in, User[] user, int playerId) {
+	public User(ObjectOutputStream out, ObjectInputStream in, User[] user, int playerId) {
 		this.out = out;
 		this.in = in;
 		this.user = user;
@@ -65,7 +65,8 @@ class User implements Runnable{
 
 	public void run() {
 		try {
-			out.writeInt(playerId);
+			out.flush();
+			out.writeObject(playerId);
 			name = in.readUTF();
 		} catch (IOException e1) {
 			e1.printStackTrace();
