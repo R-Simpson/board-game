@@ -15,11 +15,13 @@ public class Input implements Runnable{
 
 	public void run() {
 		while(true){
+			int pid;
 			int message;
 			try {
+				pid = in.readInt();
 				message = in.readInt();
 				System.out.println("Message received from player : " + message);
-				client.updateBoard(message);
+				client.updateBoard(pid, message);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

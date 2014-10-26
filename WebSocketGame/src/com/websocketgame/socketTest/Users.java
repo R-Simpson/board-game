@@ -9,7 +9,7 @@ public class Users implements Runnable {
 	DataInputStream in;
 	Users[] user = new Users[6];
 	int pid;
-	int remotePid;
+
 
 	
 	public Users(DataOutputStream out, DataInputStream in, Users[] user, int pid) {
@@ -31,11 +31,14 @@ public class Users implements Runnable {
 		while(true)
 		{
 			try {
+				int remotePid = in.readInt();
 				int message = in.readInt();
+		
 				for(int i = 0; i < 6; i++)
 				{
 					if(user[i] != null)
 					{
+						user[i].out.writeInt(remotePid);
 						user[i].out.writeInt(message);
 					}
 				}
