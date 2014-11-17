@@ -2,12 +2,10 @@ package com.objectstreamgame.scratch;
 import java.io.*;
 import java.net.*;
 
-
 public class GameServer {
 
 	static ServerSocket serverSocket;
-
-	// static Users[] user = new Users[6];
+	static GameService[] user = new GameService[6];
 	
 
 	
@@ -19,15 +17,21 @@ public class GameServer {
 		
 		while(true)
 		{
+			Socket socket = serverSocket.accept();
 			for (int i = 0; i < 6; i++)
 			{
-				Socket socket = serverSocket.accept();
 				System.out.println("Connection from " + socket.getInetAddress());
-				GameService gameService  = new GameService(socket, game);
-				Thread thread = new Thread(gameService);
-				thread.start();
+				if(user[i] == null)
+				{
+					user[i] = new GameService(socket, game, user);
+					Thread thread = new Thread(user[i]);
+					thread.start();
+					break;
+				}
+				
+				
 			}
-		}
+		}		
 	}
 }
 
