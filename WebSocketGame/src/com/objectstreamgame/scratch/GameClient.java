@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -40,8 +41,8 @@ public class GameClient extends Application {
 	
 		while(true)
 		{
-			int value = sc.nextInt();
-			out.writeInt(value);
+			Integer value = sc.nextInt();
+			out.writeObject(value);
 			out.flush();
 		}		
 	}
@@ -58,11 +59,11 @@ public class GameClient extends Application {
 
 		public void run() {
 			while(true){
-				int message;
+				Integer message;
 				try {
-					message = in.readInt();
+					message = (Integer) in.readObject();
 					System.out.println("Message received from player : " + message);
-				} catch (IOException e) {
+				} catch (IOException | ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 		

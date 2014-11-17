@@ -20,16 +20,21 @@ public class GameServer {
 			Socket socket = serverSocket.accept();
 			for (int i = 0; i < 6; i++)
 			{
-				System.out.println("Connection from " + socket.getInetAddress());
 				if(user[i] == null)
 				{
+					System.out.println("Connection from " + socket.getInetAddress());
 					user[i] = new GameService(socket, game, user);
 					Thread thread = new Thread(user[i]);
 					thread.start();
 					break;
 				}
-				
-				
+				else
+				{
+					if (i == 5)
+					{
+						System.out.println("Game is full");
+					}
+				}
 			}
 		}		
 	}
