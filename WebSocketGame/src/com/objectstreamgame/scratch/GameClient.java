@@ -41,8 +41,8 @@ public class GameClient extends Application {
 	
 		while(true)
 		{
-			Integer value = sc.nextInt();
-			out.writeObject(value);
+			GameMessage message = new GameMessage (sc.nextInt(), "Test String");
+			out.writeObject(message);
 			out.flush();
 		}		
 	}
@@ -59,10 +59,10 @@ public class GameClient extends Application {
 
 		public void run() {
 			while(true){
-				Integer message;
+				GameMessage message;
 				try {
-					message = (Integer) in.readObject();
-					System.out.println("Message received from player : " + message);
+					message = (GameMessage) in.readObject();
+					System.out.println("Message received from player : " + message.getSentValue() + " " + message.getSentString());
 				} catch (IOException | ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

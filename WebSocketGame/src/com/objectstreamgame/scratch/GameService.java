@@ -30,14 +30,15 @@ public class GameService implements Runnable {
 		while(true)
 		{
 			try {
-				Integer message = (Integer) in.readObject();
-				System.out.println("Received value " + message + ", adding to game Value");
-				game.add(message);
+				GameMessage message = (GameMessage) in.readObject();
+				System.out.println("Received value " + message.getSentValue() + " " + message.getSentString()  + ", adding to game Value");
+				game.add(message.getSentValue());
 				for(int i = 0; i < 6; i++)
 				{
 					if(user[i] != null)
 					{
-						user[i].out.writeObject(game.getValue());
+						GameMessage returnMessage = new GameMessage(game.getValue(), "Returning new game state value");
+						user[i].out.writeObject(returnMessage);
 						user[i].out.flush();
 						System.out.println("Updated game value and sent back to client " + i);
 					}
