@@ -1,31 +1,30 @@
 package com.websocketgame.socketTest;
 
 import java.io.IOException;
-import java.io.DataInputStream;
+import java.io.ObjectInputStream;
 
 public class Input implements Runnable{
 
-	DataInputStream in;
+	ObjectInputStream in;
 	Client client;
 
-	public Input(DataInputStream in, Client client){
+	public Input(ObjectInputStream in, Client client){
 		this.in = in;
 		this.client = client;
 	}
 
 	public void run() {
 		while(true){
-			int pid;
-			int message;
+			PlayerMessage message;
 			try {
-				pid = in.readInt();
-				message = in.readInt();
-				System.out.println("Message received from player : " + message);
-				client.updateBoard(pid, message);
-			} catch (IOException e) {
+				message = (PlayerMessage) in.readObject();
+				System.out.println("Message received from player : " + message.getPlayerId() + " - Order : " + message.getPlayerOrder());
+				client.updateBoard(message.getPlayerId(), message.getPlayerOrder());
+			}  catch (IOException | ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 		
 		}
 	}
 }
+

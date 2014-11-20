@@ -5,10 +5,15 @@ import java.io.Serializable;
 public class PlayerMessage implements Serializable {
 
 	private static final long serialVersionUID = 0;
-
+	
 	private int playerId;
-	private PlayerOrder[] orders;
-	private String chat;
+	private int playerOrder;
+	
+	public PlayerMessage(int playerId, int playerOrder)
+	{
+		this.playerId = playerId;
+		this.playerOrder = playerOrder;
+	}
 	
 	public int getPlayerId() {
 		return playerId;
@@ -16,18 +21,12 @@ public class PlayerMessage implements Serializable {
 	public void setPlayerId(int playerId) {
 		this.playerId = playerId;
 	}
-	public PlayerOrder[] getOrders() {
-		return orders;
+	
+	public int getPlayerOrder() {
+		return playerOrder;
 	}
-	public void setOrders(PlayerOrder[] orders) {
-		this.orders = orders;
+	public void setPlayerOrder(int playerOrder) {
+		this.playerOrder = playerOrder;
 	}
-	public String getChat() {
-		return chat;
-	}
-	public void setChat(String chat) {
-		this.chat = chat;
-	}
-
 	
 }

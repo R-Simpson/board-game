@@ -2,6 +2,8 @@ package com.websocketgame.socketTest;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +24,8 @@ import com.websocketgame.model.Land;
 public class Client extends Application {
 
 	static Socket socket;
-	static DataInputStream in;
-	static DataOutputStream out;
+	static ObjectInputStream in;
+	static ObjectOutputStream out;
 	static int playerid;
 
 	List<Land> board;
@@ -35,21 +37,20 @@ public class Client extends Application {
 		System.out.println("Connecting...");
 		socket = new Socket("localhost",7777);
 		System.out.println("Connected");
-
+		
 		// Set up input stream
-		in = new DataInputStream(socket.getInputStream());
-		playerid = in.readInt();
+		in = new ObjectInputStream(socket.getInputStream());
 
+		// Set up output stream
+		out = new ObjectOutputStream(socket.getOutputStream());
+		out.flush();
+		
+		playerid = in.readInt();
+		System.out.println("Assigned Player Id : " + playerid);
+		
 		Input input = new Input(in, this);
 		Thread inputThread = new Thread(input);
 		inputThread.start();
-
-		// Set up output stream
-		out = new DataOutputStream(socket.getOutputStream());
-		out.flush();
-		//		Output output = new Output(out);
-		//		Thread outputThread = new Thread(output);
-		//		outputThread.start();
 
 		Pane root = new Pane();
 		root.setMinSize(150, 150);
@@ -71,8 +72,8 @@ public class Client extends Application {
 			land.polygon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {	
 					try {
-						out.writeInt(playerid);
-						out.writeInt(land.getLandId());
+						PlayerMessage message = new PlayerMessage(playerid, land.getLandId());
+						out.writeObject(message);
 						System.out.println("Send message from client " + playerid + " to claim " + land.getLandId());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
@@ -85,7 +86,7 @@ public class Client extends Application {
 		root.getChildren().addAll(polyList);
 
 		stage.setScene(new Scene(root));
-		stage.show();		
+		stage.show();	
 	}
 
 	public void updateBoard(int pid, int area)
