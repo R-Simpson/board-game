@@ -1,20 +1,19 @@
-package com.websocketgame.socketTest;
-
+package ObjectStreamTest;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
-public class Server {
+public class GameServer {
 
 	static ServerSocket serverSocket;
-	static UserService[] user = new UserService[6];
-	static GameState game = new GameState();
+	static GameService[] user = new GameService[6];
+	
 
 	
 	public static void main(String[] args) throws Exception
 	{
 		serverSocket = new ServerSocket(7777);
 		System.out.println("Server Started...");
+		Game game = new Game(0);
 		
 		while(true)
 		{
@@ -24,13 +23,20 @@ public class Server {
 				if(user[i] == null)
 				{
 					System.out.println("Connection from " + socket.getInetAddress());
-					user[i] = new UserService(socket, game, user, i);
+					user[i] = new GameService(socket, game, user);
 					Thread thread = new Thread(user[i]);
 					thread.start();
 					break;
 				}
+				else
+				{
+					if (i == 5)
+					{
+						System.out.println("Game is full");
+					}
+				}
 			}
-		}
+		}		
 	}
 }
 

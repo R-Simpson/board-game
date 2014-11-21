@@ -1,26 +1,17 @@
-package com.websocketgame.model;
+package com.websocketgame.serverSide;
 
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
 
 public class Land {
 
-	public Polygon polygon = new Polygon();
-
 	private int id;
-	private Color color;
+	private Polygon polygon = new Polygon();
+
 
 	public Land(int id, Color color, Double[] boundaries)
 	{
 		this.id = id;
-		this.color = color;
 		this.polygon.setFill(color);
 		this.polygon.setStroke(Color.BLACK);
 		this.polygon.getPoints().addAll(boundaries);
@@ -34,6 +25,10 @@ public class Land {
 	public Polygon getLand()
 	{
 		return polygon;
+	}
+
+	public void setColor(Color color) {
+		this.polygon.setFill(color);
 	}
 	
 }

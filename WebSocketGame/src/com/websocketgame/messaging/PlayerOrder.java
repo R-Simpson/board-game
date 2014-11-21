@@ -1,3 +1,5 @@
+package com.websocketgame.messaging;
+/*
 package com.websocketgame.socketTest;
 
 import java.io.Serializable;
@@ -23,3 +25,4 @@ public class PlayerOrder implements Serializable {
 	}
 
 }
+*/

@@ -1,8 +1,10 @@
-package com.websocketgame.socketTest;
+package com.websocketgame.messaging;
+// eventually have a separate serverMessage & a clientMessage rather than a shared message
 
 import java.io.Serializable;
 
 public class PlayerMessage implements Serializable {
+	
 
 	private static final long serialVersionUID = 0;
 	

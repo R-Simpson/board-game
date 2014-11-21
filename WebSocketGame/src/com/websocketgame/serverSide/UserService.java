@@ -1,24 +1,24 @@
-package com.websocketgame.socketTest;
+package com.websocketgame.serverSide;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import com.websocketgame.messaging.PlayerMessage;
+
 
 public class UserService implements Runnable {
 
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private GameState game;
 	private UserService[] user =  new UserService[6];
 	private int pid;
 
-	public UserService(Socket socket, GameState game, UserService[] user, int pid) throws Exception
+	public UserService(Socket socket, Game game, UserService[] user, int pid) throws Exception
 	{
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
-		this.game = game;
 		this.user = user;
 		this.pid = pid;
 
