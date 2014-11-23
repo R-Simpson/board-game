@@ -52,8 +52,11 @@ public class UserService implements Runnable {
 				}
 			} catch (IOException e) {
 				user[pid] = null;
+				System.out.println("Player disconnected");
+				break;
 			} catch (ClassNotFoundException e) {
-				System.out.println("Wrong class received");
+				System.out.println("Object received was not PlayerMessage");
+				break;
 			}
 		}
 	}

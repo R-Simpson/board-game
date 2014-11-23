@@ -31,9 +31,12 @@ public class Input implements Runnable{
 				
 				// client.updateBoard(message.getPlayerId(), message.getPlayerOrder());
 				
-			}  catch (IOException | ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			}  catch (IOException e) {
+				System.out.println("Server disconnected");
+				break;
+			} catch (ClassNotFoundException e) {
+				System.out.println("Object received was not PlayerMessage");
+				break;
 			} 		
 		}
 	}

@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
@@ -48,10 +49,12 @@ public class Client extends Application {
 		
 		Input input = new Input(in, this);
 		Thread inputThread = new Thread(input);
+		inputThread.setDaemon(true); // so thread will terminate when closing stage
 		inputThread.start();
 
 		Pane root = new Pane();
-		root.setMinSize(150, 150);
+		root.setMinSize(140, 140);
+		root.setMaxSize(140, 140);
 		
 		for(Land land: Game.INSTANCE.getGameState())
 		{
@@ -60,7 +63,19 @@ public class Client extends Application {
 					try {
 						PlayerMessage message = new PlayerMessage(playerid, land.getLandId());
 						out.writeObject(message);
-						System.out.println("Send message from client " + playerid + " to claim " + land.getLandId());
+						System.out.println("Send message from client " + playerid + " to claim " + land.getLandId() 
+								+ ", centroid: " + land.getCentroidX() + "," + land.getCentroidY() );
+	
+
+						Circle circle = new Circle();
+						circle.setCenterX(land.getCentroidX());
+						circle.setCenterY(land.getCentroidY());					
+						circle.setRadius(10.0f);
+						circle.setFill(Color.BLACK);
+
+						
+						root.getChildren().add(circle);
+						
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -72,7 +87,11 @@ public class Client extends Application {
 		root.getChildren().addAll(Game.INSTANCE.getGameBoard());
 
 		stage.setScene(new Scene(root));
+		stage.setResizable(false);
 		stage.show();	
+		
+
+		
 	}
 
 	public static void main(String[] args) {
