@@ -1,68 +1,71 @@
 package com.websocketgame.serverSide;
 
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
-
-import javafx.collections.ObservableList;
+import java.io.Serializable;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class Land {
+public class Land implements Serializable {
+	
+	private static final long serialVersionUID = 0;
 
 	private int id;
-	private Polygon polygon = new Polygon();
-	private Double centroidX;
-	private Double centroidY;
+	private String color;
+	private Double[] boundaries;
+	private Double[] centroid;
+	
+	//private Double x;
+	//private Double y;
+	
+	// private Polygon polygon = new Polygon();
 
-
-	public Land(int id, Color color, Double[] boundaries)
+	public Land(int id, String color, Double[] boundaries)
 	{
 		this.id = id;
-		this.polygon.setFill(color);
-		this.polygon.setStroke(Color.BLACK);
-		this.polygon.getPoints().addAll(boundaries);
-			
-		int i = 0;
-		centroidX = 0.0;
-		centroidY = 0.0;
-		
-		for (Double coord : boundaries)
-		{
-			if(i % 2 == 0)
-			{	centroidX += coord;	}
-			else
-			{	centroidY += coord;	}
-			i++;
-		}
-		
-		
-		centroidX = centroidX / ((i + 1)/2);
-		centroidY = centroidY / ((i + 1)/2);
-		
+		this.color = color;
+		this.boundaries = boundaries;
+		this.centroid = calculateCentroid(boundaries);
+		//this.polygon.setFill(color); this.polygon.setStroke(Color.BLACK); this.polygon.getPoints().addAll(boundaries);
 	}
+
 	
 	public int getLandId()
 	{
 		return this.id;
 	}
-	
-	public Polygon getLand()
+	public String getColor()
 	{
-		return polygon;
+		return color;
 	}
-
-	public void setColor(Color color) {
-		this.polygon.setFill(color);
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public Double[] getLandBounds()
+	{
+		return boundaries;
+	}
+	public Double[] getCentroid()
+	{
+		return centroid;
 	}
 	
-	public Double getCentroidX()
+	public Double[] calculateCentroid(Double[] boundaries)
 	{
-		return centroidX;
-	}
-	
-	public Double getCentroidY()
-	{
-		return centroidY;
+		int i = 0;
+		Double x = 0.0;
+		Double y = 0.0;
+		
+		for (Double coord : boundaries)
+		{
+			if(i % 2 == 0)
+			{	x += coord;	}
+			else
+			{	y += coord;	}
+			i++;
+		}
+		
+		x = x / ((i + 1)/2);
+		y = y / ((i + 1)/2);
+		
+		return new Double[]{x,y};
 	}
 }

@@ -35,6 +35,17 @@ public class UserService implements Runnable {
 			e1.printStackTrace();
 		}
 
+
+		System.out.println("Writing gameState to client");
+		try {
+			this.out.writeObject(Game.INSTANCE.getGameState());
+			this.out.flush();
+		} catch (IOException e1) {
+			System.out.println("Failed to write gameState to client");
+			e1.printStackTrace();
+		}
+
+
 		while(true)
 		{
 			try {
@@ -52,7 +63,7 @@ public class UserService implements Runnable {
 				}
 			} catch (IOException e) {
 				user[pid] = null;
-				System.out.println("Player disconnected");
+				System.out.println("Player " + pid + " disconnected");
 				break;
 			} catch (ClassNotFoundException e) {
 				System.out.println("Object received was not PlayerMessage");

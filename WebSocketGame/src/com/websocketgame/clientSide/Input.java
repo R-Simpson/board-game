@@ -25,10 +25,10 @@ public class Input implements Runnable{
 				
 				System.out.println("Message received from player : " + message.getPlayerId() + " - Order : " + message.getPlayerOrder());
 				
-				Game.INSTANCE.updateBoard(message.getPlayerId(), message.getPlayerOrder());
+				GameBoard.INSTANCE.updateBoard(message.getPlayerId(), message.getPlayerOrder());
 				
+				//Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
 				// client.board = GameState.INSTANCE.getGameState();
-				
 				// client.updateBoard(message.getPlayerId(), message.getPlayerOrder());
 				
 			}  catch (IOException e) {
