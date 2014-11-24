@@ -12,8 +12,8 @@ public class Land {
 
 	private int id;
 	private Polygon polygon = new Polygon();
-	private Double centroidx;
-	private Double centroidy;
+	private Double centroidX;
+	private Double centroidY;
 
 
 	public Land(int id, Color color, Double[] boundaries)
@@ -24,21 +24,21 @@ public class Land {
 		this.polygon.getPoints().addAll(boundaries);
 			
 		int i = 0;
-		centroidx = 0.0;
-		centroidy = 0.0;
+		centroidX = 0.0;
+		centroidY = 0.0;
 		
 		for (Double coord : boundaries)
 		{
 			if(i % 2 == 0)
-			{	centroidx += coord;	}
+			{	centroidX += coord;	}
 			else
-			{	centroidy += coord;	}
+			{	centroidY += coord;	}
 			i++;
 		}
 		
 		
-		centroidx = centroidx / ((i + 1)/2);
-		centroidy = centroidy / ((i + 1)/2);
+		centroidX = centroidX / ((i + 1)/2);
+		centroidY = centroidY / ((i + 1)/2);
 		
 	}
 	
@@ -58,11 +58,11 @@ public class Land {
 	
 	public Double getCentroidX()
 	{
-		return centroidx;
+		return centroidX;
 	}
 	
 	public Double getCentroidY()
 	{
-		return centroidy;
+		return centroidY;
 	}
 }

@@ -3,19 +3,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
 import com.websocketgame.messaging.PlayerMessage;
@@ -70,8 +65,14 @@ public class Client extends Application {
 						Circle circle = new Circle();
 						circle.setCenterX(land.getCentroidX());
 						circle.setCenterY(land.getCentroidY());					
-						circle.setRadius(10.0f);
+						circle.setRadius(5.0f);
 						circle.setFill(Color.BLACK);
+						
+						circle.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+							public void handle(MouseEvent e) {	
+							circle.setFill(Color.ANTIQUEWHITE);
+							}
+						});
 
 						
 						root.getChildren().add(circle);
