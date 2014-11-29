@@ -16,9 +16,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
-import com.websocketgame.messaging.PlayerMessage;
-import com.websocketgame.serverSide.Game;
-import com.websocketgame.serverSide.Land;
+import com.websocketgame.shared.Game;
+import com.websocketgame.shared.Land;
+import com.websocketgame.shared.PlayerMessage;
 
 public class Client extends Application {
 

@@ -1,4 +1,4 @@
-package com.websocketgame.serverSide;
+package com.websocketgame.shared;
 
 import java.util.ArrayList;
 import java.util.Arrays;

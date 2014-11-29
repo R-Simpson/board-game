@@ -5,8 +5,8 @@ import java.io.ObjectInputStream;
 
 import javafx.application.Platform;
 
-import com.websocketgame.messaging.PlayerMessage;
-import com.websocketgame.serverSide.Game;
+import com.websocketgame.shared.Game;
+import com.websocketgame.shared.PlayerMessage;
 
 public class Input implements Runnable{
 

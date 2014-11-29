@@ -1,4 +1,4 @@
-package com.websocketgame.messaging;
+package com.websocketgame.shared;
 /*
 package com.websocketgame.socketTest;
 

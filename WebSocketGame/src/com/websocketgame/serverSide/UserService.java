@@ -5,7 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.websocketgame.messaging.PlayerMessage;
+import com.websocketgame.shared.Game;
+import com.websocketgame.shared.PlayerMessage;
 
 
 public class UserService implements Runnable {

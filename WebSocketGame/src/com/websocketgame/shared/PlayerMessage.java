@@ -1,4 +1,4 @@
-package com.websocketgame.messaging;
+package com.websocketgame.shared;
 // eventually have a separate serverMessage & a clientMessage rather than a shared message
 
 import java.io.Serializable;

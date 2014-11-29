@@ -3,6 +3,8 @@ package com.websocketgame.serverSide;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.websocketgame.shared.Game;
+
 
 public class Server {
 
