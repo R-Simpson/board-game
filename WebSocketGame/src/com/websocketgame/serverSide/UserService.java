@@ -21,7 +21,6 @@ public class UserService implements Runnable {
 		in = new ObjectInputStream(socket.getInputStream());
 		this.user = user;
 		this.pid = pid;
-
 	}
 
 	public void run() 
@@ -34,7 +33,6 @@ public class UserService implements Runnable {
 			System.out.println("Failed to write playerId to client");
 			e1.printStackTrace();
 		}
-
 
 		System.out.println("Writing gameState to client");
 		try {
@@ -51,6 +49,9 @@ public class UserService implements Runnable {
 			try {
 				PlayerMessage message = (PlayerMessage) in.readObject();
 				// validate & alter game state
+				
+				Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
+				
 				for(int i = 0; i < 6; i++)
 				{
 					if(user[i] != null)

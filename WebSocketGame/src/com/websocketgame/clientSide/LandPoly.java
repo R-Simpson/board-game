@@ -1,3 +1,4 @@
+/*
 package com.websocketgame.clientSide;
 
 import javafx.scene.shape.Polygon;
@@ -32,3 +33,4 @@ public class LandPoly {
 	
 	
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.websocketgame.clientSide;
 
 import java.util.ArrayList;
@@ -14,18 +15,14 @@ public enum GameBoard {
 	INSTANCE;
 
 	private List<Land> gameState  = new ArrayList<Land>(Game.INSTANCE.getGameState());
-	private List<LandPoly> gameBoard = new ArrayList<LandPoly>();
+	private List<Polygon> gameBoard = new ArrayList<Polygon>();
 
-	public List<LandPoly> getGameBoard()
+	public List<Polygon> getGameBoard()
 	{
 		for(Land land: gameState)
 		{	
-			Polygon polygon = new Polygon();
-			polygon.setFill(Color.valueOf(land.getColor())); 
-			polygon.setStroke(Color.BLACK); 
-			polygon.getPoints().addAll(land.getLandBounds());
-			LandPoly landPoly = new LandPoly(land, polygon);
-			gameBoard.add(landPoly);
+			Polygon polygon = land.getPolygon();
+			gameBoard.add(polygon);
 		}
 		return gameBoard;
 	}
@@ -36,11 +33,13 @@ public enum GameBoard {
 			@Override
 			public void run() {
 				Game.INSTANCE.updateGameState(pid, area);
-				for (LandPoly landPoly : gameBoard)
+				for (Polygon polygon : gameBoard)
 				{
-					landPoly.getPolygon().setFill(Color.valueOf(landPoly.getLand().getColor()));
+
+
 				}
 			}
 		});
 	}
 }
+*/

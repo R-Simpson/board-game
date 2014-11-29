@@ -46,6 +46,7 @@ public class Client extends Application {
 		System.out.println("Assigned Player Id : " + playerid);
 		
 		Game.INSTANCE.setGameState((List<Land>) in.readObject());
+		
 		System.out.println("Set gameState as defined by server");
 
 		Input input = new Input(in, this);
@@ -57,25 +58,24 @@ public class Client extends Application {
 		root.setMinSize(140, 140);
 		root.setMaxSize(140, 140);
 
-		List<Polygon> boardGUI = new ArrayList<Polygon>();
-		
-		for(LandPoly land: GameBoard.INSTANCE.getGameBoard())
+		List<Polygon> board = new ArrayList<Polygon>();
+
+		for(Land land: Game.INSTANCE.getGameState())
 		{
-			boardGUI.add(land.getPolygon());
-			
+			board.add(land.getPolygon());	
 			land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {	
 					try {
-						PlayerMessage message = new PlayerMessage(playerid, land.getLand().getLandId());
+						PlayerMessage message = new PlayerMessage(playerid, land.getLandId());
 						out.writeObject(message);
 
-						System.out.println("Send message from client " + playerid + " to claim " + land.getLand().getLandId() 
-								+ ", centroid: " + land.getLand().getCentroid()[0] + "," + land.getLand().getCentroid()[1] );
+						System.out.println("Send message from client " + playerid + " to claim " + land.getLandId() 
+								+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
 	
 						// Draw 'gamepiece' test
 						Circle circle = new Circle();
-						circle.setCenterX(land.getLand().getCentroid()[0]);
-						circle.setCenterY(land.getLand().getCentroid()[1]);					
+						circle.setCenterX(land.getCentroid()[0]);
+						circle.setCenterY(land.getCentroid()[1]);					
 						circle.setRadius(5.0f);
 						circle.setFill(Color.BLACK);
 						
@@ -96,14 +96,10 @@ public class Client extends Application {
 			});
 		}
 
-		root.getChildren().addAll(boardGUI);
-
+		root.getChildren().addAll(board);
 		stage.setScene(new Scene(root));
 		stage.setResizable(false);
 		stage.show();	
-		
-
-		
 	}
 
 	public static void main(String[] args) {

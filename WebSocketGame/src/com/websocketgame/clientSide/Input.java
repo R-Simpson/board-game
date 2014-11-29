@@ -3,6 +3,8 @@ package com.websocketgame.clientSide;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import javafx.application.Platform;
+
 import com.websocketgame.messaging.PlayerMessage;
 import com.websocketgame.serverSide.Game;
 
@@ -19,18 +21,16 @@ public class Input implements Runnable{
 	public void run() {
 		while(true){
 			PlayerMessage message;
-			try {
-				
-				message = (PlayerMessage) in.readObject();
-				
+			try {			
+				message = (PlayerMessage) in.readObject();		
 				System.out.println("Message received from player : " + message.getPlayerId() + " - Order : " + message.getPlayerOrder());
 				
-				GameBoard.INSTANCE.updateBoard(message.getPlayerId(), message.getPlayerOrder());
-				
-				//Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
-				// client.board = GameState.INSTANCE.getGameState();
-				// client.updateBoard(message.getPlayerId(), message.getPlayerOrder());
-				
+				Platform.runLater(new Runnable() {	// GUI updates MUST be run on the JavaFX thread - rund st 'some unspecified time in the future
+					@Override
+					public void run() {
+						Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
+					}
+				});				
 			}  catch (IOException e) {
 				System.out.println("Server disconnected");
 				break;
