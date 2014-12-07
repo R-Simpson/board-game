@@ -33,6 +33,7 @@ public class Input implements Runnable{
 				});				
 			}  catch (IOException e) {
 				System.out.println("Server disconnected");
+				// Need to stop thread / close client
 				break;
 			} catch (ClassNotFoundException e) {
 				System.out.println("Object received was not PlayerMessage");

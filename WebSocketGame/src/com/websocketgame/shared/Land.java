@@ -2,6 +2,7 @@ package com.websocketgame.shared;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -14,18 +15,19 @@ public class Land implements Serializable {
 	private String color;
 	private Double[] boundaries;
 	private Double[] centroid;
+	private ArrayList<Unit> units;
 	private transient Polygon polygon = new Polygon();
-
+	
 	public Land(int id, String color, Double[] boundaries)
 	{
 		this.id = id;
 		this.color = color;
 		this.boundaries = boundaries;
+		this.units = new ArrayList<Unit>();
 		this.centroid = calculateCentroid(boundaries);
 		this.polygon = setUpPolygon(color, boundaries);
 	}
 
-	
 	public int getLandId()
 	{
 		return this.id;

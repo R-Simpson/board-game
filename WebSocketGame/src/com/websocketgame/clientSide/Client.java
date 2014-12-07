@@ -10,13 +10,20 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import Units.AbstractUnit;
+import Units.Footman;
+import Units.Knight;
 
 import com.websocketgame.shared.Game;
+import com.websocketgame.shared.Unit;
 import com.websocketgame.shared.Land;
 import com.websocketgame.shared.PlayerMessage;
 
@@ -55,8 +62,8 @@ public class Client extends Application {
 		inputThread.start();
 
 		Pane root = new Pane();
-		root.setMinSize(140, 140);
-		root.setMaxSize(140, 140);
+		root.setMinSize(140, 190);
+		root.setMaxSize(140, 190);
 
 		List<Polygon> board = new ArrayList<Polygon>();
 
@@ -71,26 +78,21 @@ public class Client extends Application {
 
 						System.out.println("Send message from client " + playerid + " to claim " + land.getLandId() 
 								+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
-	
-						// Draw 'gamepiece' test
-						Circle circle = new Circle();
-						circle.setCenterX(land.getCentroid()[0]);
-						circle.setCenterY(land.getCentroid()[1]);					
-						circle.setRadius(5.0f);
-						circle.setFill(Color.BLACK);
-						
-						circle.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
-							public void handle(MouseEvent e) {	
-							circle.setFill(Color.ANTIQUEWHITE);
-							}
-						});
-						
+						/*
+						Unit gamepiece = new Unit(land);
+						Circle circle = gamepiece.getCircle();
 						root.getChildren().add(circle);
-						// End Draw 'gamepiece' test
+						*/
+						
+						AbstractUnit footman = new Footman(land);
+						AbstractUnit knight = new Knight(land);
+
+						root.getChildren().add(footman.getText());
+						root.getChildren().add(knight.getText());	
 						
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						System.out.println("Unable to reach server");
+						// e1.printStackTrace();
 					}
 				}
 			});

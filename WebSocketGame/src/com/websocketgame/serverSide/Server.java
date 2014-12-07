@@ -10,7 +10,7 @@ public class Server {
 
 	static ServerSocket serverSocket;
 	static UserService[] user = new UserService[6];
-	static Game game;
+	// static Game game;
 
 	
 	public static void main(String[] args) throws Exception
@@ -26,7 +26,7 @@ public class Server {
 				if(user[i] == null)
 				{
 					System.out.println("Connection from " + socket.getInetAddress());
-					user[i] = new UserService(socket, game, user, i);
+					user[i] = new UserService(socket, Game.INSTANCE, user, i);
 					Thread thread = new Thread(user[i]);
 					thread.start();
 					break;
