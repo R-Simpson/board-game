@@ -13,15 +13,25 @@ public enum Game {
 	INSTANCE;
 
 	private List<Land> gameState  = new ArrayList<Land>(Arrays.asList(
-			new Land(1, "GREY", new Double[]{0.0,0.0, 50.0,0.0, 40.0,20.0, 50.0,40.0, 0.0,50.0}), 
-			new Land(2, "GREY", new Double[]{50.0,0.0, 40.0,20.0, 50.0,40.0, 100.0,50.0, 90.0,40.0, 100.0,20.0, 80.0,10.0, 100.0,0.0}), 
-			new Land(3, "GREY", new Double[]{100.0,0.0, 80.0,10.0, 100.0,20.0, 90.0,40.0, 100.0,50.0, 150.0,70.0, 150.0,0.0}),
-			new Land(4, "GREY", new Double[]{0.0,50.0, 50.0,40.0, 100.0,50.0, 90.0,100.0, 0.0,100.0}), 
-			new Land(5, "GREY", new Double[]{100.0,50.0, 150.0,70.0, 150.0,150.0, 120.0,150.0, 90.0,100.0}), 
-			new Land(6, "GREY", new Double[]{0.0,100.0, 90.0,100.0, 120.0,150.0, 0.0,150.0}),
-			new Land(7, "GREY", new Double[]{0.0,150.0, 100.0,150.0, 70.0,200.0, 0.0, 200.00}),
-			new Land(8, "GREY", new Double[]{100.0,150.0, 150.0,150.0, 150.0,200.0, 70.0,200.0})));
+			new Land(1, "GREY", new Double[]{0.0,0.0, 50.0,0.0, 40.0,20.0, 50.0,40.0, 0.0,50.0}, new int[]{2,4}), 
+			new Land(2, "GREY", new Double[]{50.0,0.0, 40.0,20.0, 50.0,40.0, 100.0,50.0, 90.0,40.0, 100.0,20.0, 90.0,10.0, 100.0,0.0}, new int[]{1,3,4}), 
+			new Land(3, "GREY", new Double[]{100.0,0.0, 90.0,10.0, 100.0,20.0, 90.0,40.0, 100.0,50.0, 150.0,70.0, 150.0,0.0}, new int[]{2,5}),
+			new Land(4, "GREY", new Double[]{0.0,50.0, 50.0,40.0, 100.0,50.0, 90.0,100.0, 0.0,100.0}, new int[]{1,2,5,6}), 
+			new Land(5, "GREY", new Double[]{100.0,50.0, 150.0,70.0, 150.0,150.0, 120.0,150.0, 90.0,100.0}, new int[]{3,4,6,8}), 
+			new Land(6, "GREY", new Double[]{0.0,100.0, 90.0,100.0, 120.0,150.0, 0.0,150.0}, new int[]{4,5,7,8}),
+			new Land(7, "GREY", new Double[]{0.0,150.0, 80.0,150.0, 90.0,170.0, 70.0,200.0, 0.0, 200.00}, new int[]{6,8}),
+			new Land(8, "GREY", new Double[]{100.0,150.0, 150.0,150.0, 150.0,200.0, 70.0,200.0, 90.0,170.00, 80.0,150.0}, new int[]{5,6,7})));
 	
+	private List<Unit> units = new ArrayList<Unit>(Arrays.asList(
+			new Unit(1,1,gameState.get(0)),
+			new Unit(1,1,gameState.get(1)),
+			new Unit(1,1,gameState.get(2)),
+			new Unit(1,1,gameState.get(3)),
+			new Unit(1,1,gameState.get(4)),
+			new Unit(1,1,gameState.get(5)),
+			new Unit(1,1,gameState.get(6)),
+			new Unit(2,2,gameState.get(7))));
+			
 	
 	public List<Land> getGameState()
 	{

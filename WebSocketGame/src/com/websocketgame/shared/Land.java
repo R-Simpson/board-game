@@ -15,16 +15,19 @@ public class Land implements Serializable {
 	private String color;
 	private Double[] boundaries;
 	private Double[] centroid;
-	private ArrayList<Unit> units;
+	private int[] adjacentLands;
+	private Unit unit;
+	// private ArrayList<Unit> units;
 	private transient Polygon polygon = new Polygon();
 	
-	public Land(int id, String color, Double[] boundaries)
+	public Land(int id, String color, Double[] boundaries, int[] adjacentLands)
 	{
 		this.id = id;
 		this.color = color;
 		this.boundaries = boundaries;
-		this.units = new ArrayList<Unit>();
+		this.unit = unit;
 		this.centroid = calculateCentroid(boundaries);
+		this.adjacentLands = adjacentLands;
 		this.polygon = setUpPolygon(color, boundaries);
 	}
 
@@ -53,6 +56,11 @@ public class Land implements Serializable {
 		return centroid;
 	}
 	
+	public int[] getAdjacency()
+	{
+		return adjacentLands;
+	}
+	
 	public Polygon getPolygon()
 	{
 		return polygon;
@@ -61,6 +69,21 @@ public class Land implements Serializable {
 	public void setPolygon(Polygon polygon)	// unneeded? Update method to take colour, owner, units?
 	{
 		this.polygon = polygon;
+	}
+	
+	public Unit getUnit()
+	{
+		return unit;
+	}
+	
+	public void addUnit(Unit unit)
+	{
+		this.unit = unit;
+	}
+	
+	public void removeUnit()
+	{
+		this.unit = null;
 	}
 	
 	public Double[] calculateCentroid(Double[] boundaries)

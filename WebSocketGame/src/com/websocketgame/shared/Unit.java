@@ -5,35 +5,90 @@ import java.io.Serializable;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.*;
 
 public class Unit implements Serializable {
 	
 	private static final long serialVersionUID = 0;
 	
 	private int owner;
-	private int type; // footman, knight, catapult , boat
+	private int type;
+	private Land land;
+	private transient Shape shape;
 	
-	
-	private Circle circle;
-	
-	public Unit(Land land)
+	public Unit(int owner, int type, Land land)
 	{
-		this.circle = new Circle();
-		this.circle.setCenterX(land.getCentroid()[0]);
-		this.circle.setCenterY(land.getCentroid()[1]);					
-		this.circle.setRadius(5.0f);
-		this.circle.setFill(Color.BLACK);
+		this.owner = owner;
+		this.type = type;
+		this.land = land;
+		
+		if (type==1)
+		{
+			Circle circle = new Circle();
+			circle.setCenterX(land.getCentroid()[0]);
+			circle.setCenterY(land.getCentroid()[1]);					
+			circle.setRadius(5.0);
+			circle.setStroke(Color.BLACK);
+			this.shape = circle;
+		}
+		else if (type==2)
+		{
+			Rectangle square = new Rectangle();
+			square.setLayoutX(land.getCentroid()[0]);
+			square.setLayoutY(land.getCentroid()[1]);
+			square.setWidth(5.0);
+			square.setHeight(5.0);
+			square.setStroke(Color.BLACK);
+			this.shape = square;
+		}
 
-		this.circle.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
-			public void handle(MouseEvent e) {	
-			circle.setFill(Color.ANTIQUEWHITE);
+		
+		switch (owner){
+		case 0:
+			this.shape.setFill(Color.RED);
+			break;
+		case 1:
+			this.shape.setFill(Color.BLUE);
+			break;
+		case 2:
+			this.shape.setFill(Color.YELLOW);
+			break;
+		case 3:
+			this.shape.setFill(Color.GREEN);
+			break;
+		case 4:
+			this.shape.setFill(Color.ORANGE);
+			break;
+		case 5:
+			this.shape.setFill(Color.PURPLE);
+			break;
+		}
+		
+
+		this.shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e) {
+			if (shape instanceof Circle)
+			{
+				((Circle) shape).setRadius(10.0); 
+			}
+			else if (shape instanceof Rectangle)
+			{
+				((Rectangle) shape).setWidth(10.0);
+				((Rectangle) shape).setHeight(10.0);
+			}
 			}
 		});
+		
+		this.land.addUnit(this);
 	}
 
-	public Circle getCircle() {
-		return circle;
+	public Shape getShape() {
+		return shape;
+	}
+	
+	public Unit getUnit()
+	{
+		return this;
 	}
 	
 }
