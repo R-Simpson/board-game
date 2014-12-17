@@ -66,13 +66,13 @@ public class Client extends Application {
 			inputThread.start();
 
 			root = new Pane();
-			root.setMinSize(140, 190);
-			root.setMaxSize(140, 190);
+			root.setMinSize(1000, 1000);
+			root.setMaxSize(1000, 1000);
 			
 			refreshDisplay();
 			
 			stage.setScene(new Scene(root));
-			stage.setResizable(false);
+			//stage.setResizable(false);
 			stage.show();	
 
 		} catch (ConnectException e1) {

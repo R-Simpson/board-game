@@ -28,7 +28,7 @@ public class Server {
 				land.addUnit(new Unit(1,1, land));
 				System.out.println("Adding unit 1,1 to land 1");	
 			}
-			if (land.getLandId() == 7)
+			if (land.getLandId() == 5)
 			{
 				land.addUnit(new Unit(2,2, land));
 				System.out.println("Adding unit 2,2 to land 8");
