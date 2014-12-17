@@ -17,7 +17,6 @@ public class Land implements Serializable {
 	private Double[] centroid;
 	private int[] adjacentLands;
 	private Unit unit;
-	// private ArrayList<Unit> units;
 	private transient Polygon polygon = new Polygon();
 	
 	public Land(int id, String color, Double[] boundaries, int[] adjacentLands)
@@ -25,12 +24,12 @@ public class Land implements Serializable {
 		this.id = id;
 		this.color = color;
 		this.boundaries = boundaries;
-		this.unit = unit;
+		this.unit = null;
 		this.centroid = calculateCentroid(boundaries);
 		this.adjacentLands = adjacentLands;
 		this.polygon = setUpPolygon(color, boundaries);
 	}
-
+	
 	public int getLandId()
 	{
 		return this.id;
@@ -121,6 +120,7 @@ public class Land implements Serializable {
     	stream.writeObject(color);
     	stream.writeObject(boundaries);
     	stream.writeObject(centroid);
+    	stream.writeObject(unit);
     	System.out.println("Writing land " + id + ", color " + color);
     }
 	
@@ -130,8 +130,8 @@ public class Land implements Serializable {
     	this.color = (String) stream.readObject();
     	this.boundaries = (Double[]) stream.readObject();
 		this.centroid = (Double[]) stream.readObject();
+		this.unit = (Unit) stream.readObject();
 		this.polygon = setUpPolygon(color, boundaries); // set up Polygon (transient) from boundaries & colour
 		System.out.println("Reading land " + id + ", color " + color);
-		
 	}
 }

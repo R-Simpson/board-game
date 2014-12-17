@@ -67,39 +67,39 @@ public class Client extends Application {
 			root.setMinSize(140, 190);
 			root.setMaxSize(140, 190);
 
-			List<Polygon> board = new ArrayList<Polygon>();
+			//List<Polygon> board = new ArrayList<Polygon>();
 			
 			
 
 			for(Land land: Game.INSTANCE.getGameState())
 			{
-				board.add(land.getPolygon());	
+				//board.add(land.getPolygon());	
 				
-				root.getChildren().add(land.getUnit().getShape());
+				root.getChildren().add(land.getPolygon());
+				
+				if (land.getUnit() != null)
+				{
+					System.out.println("Adding a unit for land " + land.getLandId());
+					root.getChildren().add(land.getUnit().getShape());
+				}
 				
 				land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 					public void handle(MouseEvent e) {	
 						try {
 							PlayerMessage message = new PlayerMessage(playerid, land.getLandId());
+							
 							out.writeObject(message);
 
 							System.out.println("Send message from client " + playerid + " to claim " + land.getLandId() 
 									+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
-
-
-							//Unit gamepiece = new Unit(playerid,1,land);
-							
+/*
+							//Unit gamepiece = new Unit(playerid,1,land);						
 							//root.getChildren().add(gamepiece.getShape());
-							
-
-
-							/*
 						AbstractUnit footman = new Footman(land);
 						AbstractUnit knight = new Knight(land);
-
 						root.getChildren().add(footman.getText());
 						root.getChildren().add(knight.getText());	
-							 */
+*/
 						} catch (IOException e1) {
 							System.out.println("Unable to send message to server");
 						}
@@ -107,7 +107,7 @@ public class Client extends Application {
 				});
 			}
 
-			root.getChildren().addAll(board);
+		//	root.getChildren().addAll(board);
 			stage.setScene(new Scene(root));
 			stage.setResizable(false);
 			stage.show();	

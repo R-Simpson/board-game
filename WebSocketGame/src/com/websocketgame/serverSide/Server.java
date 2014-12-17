@@ -4,6 +4,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.websocketgame.shared.Game;
+import com.websocketgame.shared.Land;
+import com.websocketgame.shared.Unit;
 
 
 public class Server {
@@ -17,6 +19,22 @@ public class Server {
 	{
 		serverSocket = new ServerSocket(7777);
 		System.out.println("Server Started...");
+		
+		// set starting units - move this to it's own method or class
+		for(Land land: Game.INSTANCE.getGameState())
+		{
+			if (land.getLandId() == 1)
+			{
+				land.addUnit(new Unit(1,1, land));
+				System.out.println("Adding unit 1,1 to land 1");	
+			}
+			if (land.getLandId() == 8)
+			{
+				land.addUnit(new Unit(2,2, land));
+				System.out.println("Adding unit 2,2 to land 8");
+			}
+		}
+			
 		
 		while(true)
 		{

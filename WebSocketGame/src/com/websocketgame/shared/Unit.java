@@ -1,5 +1,6 @@
 package com.websocketgame.shared;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import javafx.event.EventHandler;
@@ -21,7 +22,11 @@ public class Unit implements Serializable {
 		this.owner = owner;
 		this.type = type;
 		this.land = land;
-		
+		setUpShape(owner, type, land);
+	}
+	
+	private void setUpShape(int owner, int type, Land land)
+	{
 		if (type==1)
 		{
 			Circle circle = new Circle();
@@ -41,8 +46,7 @@ public class Unit implements Serializable {
 			square.setStroke(Color.BLACK);
 			this.shape = square;
 		}
-
-		
+	
 		switch (owner){
 		case 0:
 			this.shape.setFill(Color.RED);
@@ -64,7 +68,6 @@ public class Unit implements Serializable {
 			break;
 		}
 		
-
 		this.shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e) {
 			if (shape instanceof Circle)
@@ -78,8 +81,6 @@ public class Unit implements Serializable {
 			}
 			}
 		});
-		
-		this.land.addUnit(this);
 	}
 
 	public Shape getShape() {
@@ -89,6 +90,20 @@ public class Unit implements Serializable {
 	public Unit getUnit()
 	{
 		return this;
+	}
+	
+    private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
+    	stream.writeInt(owner);
+    	stream.writeInt(type);
+    	stream.writeObject(land);
+    	System.out.println("Writing unit with owner " + owner + ", type " + type);
+    }
+	
+    private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {   	
+    	this.owner =  stream.readInt();
+    	this.type =  stream.readInt();
+    	this.land = (Land) stream.readObject();
+    	setUpShape(owner, type, land);
 	}
 	
 }

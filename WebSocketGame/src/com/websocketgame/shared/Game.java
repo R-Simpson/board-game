@@ -22,17 +22,6 @@ public enum Game {
 			new Land(7, "GREY", new Double[]{0.0,150.0, 80.0,150.0, 90.0,170.0, 70.0,200.0, 0.0, 200.00}, new int[]{6,8}),
 			new Land(8, "GREY", new Double[]{100.0,150.0, 150.0,150.0, 150.0,200.0, 70.0,200.0, 90.0,170.00, 80.0,150.0}, new int[]{5,6,7})));
 	
-	private List<Unit> units = new ArrayList<Unit>(Arrays.asList(
-			new Unit(1,1,gameState.get(0)),
-			new Unit(1,1,gameState.get(1)),
-			new Unit(1,1,gameState.get(2)),
-			new Unit(1,1,gameState.get(3)),
-			new Unit(1,1,gameState.get(4)),
-			new Unit(1,1,gameState.get(5)),
-			new Unit(1,1,gameState.get(6)),
-			new Unit(2,2,gameState.get(7))));
-			
-	
 	public List<Land> getGameState()
 	{
 		return gameState;
