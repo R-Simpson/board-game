@@ -34,6 +34,8 @@ public class Client extends Application {
 	static ObjectInputStream in;
 	static ObjectOutputStream out;
 	static int playerid;
+	private Pane root;
+	// private Stage stage;
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -63,51 +65,12 @@ public class Client extends Application {
 			inputThread.setDaemon(true); // so thread will terminate when closing stage
 			inputThread.start();
 
-			Pane root = new Pane();
+			root = new Pane();
 			root.setMinSize(140, 190);
 			root.setMaxSize(140, 190);
-
-			//List<Polygon> board = new ArrayList<Polygon>();
 			
+			refreshDisplay();
 			
-
-			for(Land land: Game.INSTANCE.getGameState())
-			{
-				//board.add(land.getPolygon());	
-				
-				root.getChildren().add(land.getPolygon());
-				
-				if (land.getUnit() != null)
-				{
-					System.out.println("Adding a unit for land " + land.getLandId());
-					root.getChildren().add(land.getUnit().getShape());
-				}
-				
-				land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-					public void handle(MouseEvent e) {	
-						try {
-							PlayerMessage message = new PlayerMessage(playerid, land.getLandId());
-							
-							out.writeObject(message);
-
-							System.out.println("Send message from client " + playerid + " to claim " + land.getLandId() 
-									+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
-/*
-							//Unit gamepiece = new Unit(playerid,1,land);						
-							//root.getChildren().add(gamepiece.getShape());
-						AbstractUnit footman = new Footman(land);
-						AbstractUnit knight = new Knight(land);
-						root.getChildren().add(footman.getText());
-						root.getChildren().add(knight.getText());	
-*/
-						} catch (IOException e1) {
-							System.out.println("Unable to send message to server");
-						}
-					}
-				});
-			}
-
-		//	root.getChildren().addAll(board);
 			stage.setScene(new Scene(root));
 			stage.setResizable(false);
 			stage.show();	
@@ -120,6 +83,40 @@ public class Client extends Application {
 	public static void main(String[] args) {
 
 		launch(args);
+	}
+	
+
+	void refreshDisplay()	// package private
+	{
+		// Clearing and rebuilding every time - seems dumb. How to update & refresh?
+		root.getChildren().clear();
+		
+		for(Land land: Game.INSTANCE.getGameState())
+		{	
+			root.getChildren().add(land.getPolygon());
+			
+			if (land.getUnit() != null)
+			{
+				System.out.println("Adding a unit for land " + land.getLandId());
+				root.getChildren().add(land.getUnit().getShape());
+			}
+			
+			land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+				public void handle(MouseEvent e) {	
+					try {
+						PlayerMessage message = new PlayerMessage(playerid, land.getLandId());
+						
+						out.writeObject(message);
+
+						System.out.println("Send message from client " + playerid + " to claim " + land.getLandId() 
+								+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
+
+					} catch (IOException e1) {
+						System.out.println("Unable to send message to server");
+					}
+				}
+			});
+		}
 	}
 }
 

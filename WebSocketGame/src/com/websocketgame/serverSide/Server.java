@@ -23,12 +23,12 @@ public class Server {
 		// set starting units - move this to it's own method or class
 		for(Land land: Game.INSTANCE.getGameState())
 		{
-			if (land.getLandId() == 1)
+			if (land.getLandId() == 0)
 			{
 				land.addUnit(new Unit(1,1, land));
 				System.out.println("Adding unit 1,1 to land 1");	
 			}
-			if (land.getLandId() == 8)
+			if (land.getLandId() == 7)
 			{
 				land.addUnit(new Unit(2,2, land));
 				System.out.println("Adding unit 2,2 to land 8");
