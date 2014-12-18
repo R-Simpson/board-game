@@ -91,13 +91,19 @@ public class Client extends Application {
 			
 			refreshDisplay();
 			
-			//pane.setScaleX(0.3);
-			//pane.setScaleY(0.3);
+			// resizes correctly but is orientated centrally, not top left
+			//pane.setScaleX(0.5);
+			//pane.setScaleY(0.5);
 			
-			// not helping
+
 			final ScrollPane scroll = new ScrollPane();
 			scroll.setContent(pane);
+			scroll.setFitToWidth(true);
 			
+			scroll.setMinHeight(800);
+			scroll.setMaxHeight(800);
+			
+			// not helping
 			/*
 		    final StackPane stack = new StackPane();
 		    stack.getChildren().addAll(root);
