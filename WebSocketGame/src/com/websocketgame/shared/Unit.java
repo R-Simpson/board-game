@@ -41,8 +41,8 @@ public class Unit implements Serializable {
 			Rectangle square = new Rectangle();
 			square.setLayoutX(land.getCentroid()[0]);
 			square.setLayoutY(land.getCentroid()[1]);
-			square.setWidth(5.0);
-			square.setHeight(5.0);
+			square.setWidth(10.0);
+			square.setHeight(10.0);
 			square.setStroke(Color.BLACK);
 			this.shape = square;
 		}
@@ -76,8 +76,8 @@ public class Unit implements Serializable {
 			}
 			else if (shape instanceof Rectangle)
 			{
-				((Rectangle) shape).setWidth(10.0);
-				((Rectangle) shape).setHeight(10.0);
+				((Rectangle) shape).setWidth(20.0);
+				((Rectangle) shape).setHeight(20.0);
 			}
 			}
 		});
