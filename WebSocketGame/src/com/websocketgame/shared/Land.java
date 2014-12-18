@@ -110,7 +110,7 @@ public class Land implements Serializable {
 	private Polygon setUpPolygon(String color, Double[] boundaries)
 	{
 		Polygon tempPoly = new Polygon();
-		tempPoly.setFill(Color.valueOf(color).deriveColor(1, 1, 1, 0.0));		
+		tempPoly.setFill(Color.valueOf(color).deriveColor(1, 1, 1, 0.2));		
 		tempPoly.setStroke(Color.WHITE);
 		tempPoly.setStrokeWidth(7);
 		tempPoly.getPoints().addAll(boundaries);
