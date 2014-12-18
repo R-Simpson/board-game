@@ -114,8 +114,8 @@ public class Land implements Serializable {
 		//tempPoly.setFill(Color.valueOf(color)); 
 		tempPoly.setFill(new Color(1f,0f,0f,.1f ));
 		
-		tempPoly.setStroke(Color.BLACK);
-		tempPoly.setStrokeWidth(5);
+		tempPoly.setStroke(Color.WHITE);
+		tempPoly.setStrokeWidth(7);
 		//tempPoly.setVisible(false);
 		tempPoly.getPoints().addAll(boundaries);
 		return tempPoly;

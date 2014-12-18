@@ -8,11 +8,14 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import com.websocketgame.shared.Game;
@@ -25,7 +28,7 @@ public class Client extends Application {
 	static ObjectInputStream in;
 	static ObjectOutputStream out;
 	static int playerid;
-	private Pane root;
+	private Pane pane;
 	// private Stage stage;
 
 	@Override
@@ -56,18 +59,18 @@ public class Client extends Application {
 			inputThread.setDaemon(true); // so thread will terminate when closing stage
 			inputThread.start();
 
-			root = new Pane();
+			pane = new Pane();
 //			root.setMinSize(150, 150);
 //			root.setMaxSize(150, 150);
 			
 			Image image = new Image("file:res/got.jpg");
 	        ImageView iv1 = new ImageView();
 	        iv1.setImage(image);
-	        root.getChildren().add(iv1);
+	        pane.getChildren().add(iv1);
 			
 			for(Land land: Game.INSTANCE.getGameState())
 			{	
-				root.getChildren().add(land.getPolygon());
+				pane.getChildren().add(land.getPolygon());
 				
 				land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 					public void handle(MouseEvent e) {	
@@ -85,8 +88,24 @@ public class Client extends Application {
 					}
 				});
 			}
-				
-			stage.setScene(new Scene(root));
+			
+			refreshDisplay();
+			
+			//pane.setScaleX(0.3);
+			//pane.setScaleY(0.3);
+			
+			// not helping
+			final ScrollPane scroll = new ScrollPane();
+			scroll.setContent(pane);
+			
+			/*
+		    final StackPane stack = new StackPane();
+		    stack.getChildren().addAll(root);
+		    StackPane.setAlignment(root, Pos.TOP_LEFT);
+		    stack.setStyle("-fx-background-color: blue;");
+			*/
+					
+			stage.setScene(new Scene(scroll));
 			stage.setResizable(false);
 			stage.show();	
 
@@ -113,10 +132,10 @@ public class Client extends Application {
 		{			
 			if (land.getUnit() != null)
 			{
-				if (!root.getChildren().contains(land.getUnit().getShape()))
+				if (!pane.getChildren().contains(land.getUnit().getShape()))
 				{
 					System.out.println("Adding a unit for land " + land.getLandId());
-					root.getChildren().add(land.getUnit().getShape());
+					pane.getChildren().add(land.getUnit().getShape());
 				}
 			}
 		}
