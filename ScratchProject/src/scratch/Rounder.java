@@ -29,7 +29,7 @@ public class Rounder {
 		{
 			for (int value: coords)
 			{
-				value = (value / 10) * 10;
+				value = (value / 10) * 3;
 				double dbl = value;
 				dblCoords.add(dbl);
 				System.out.print(dbl + ",");

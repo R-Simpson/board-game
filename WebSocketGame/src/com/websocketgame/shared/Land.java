@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
 
 public class Land implements Serializable {
 	
@@ -109,8 +110,13 @@ public class Land implements Serializable {
 	private Polygon setUpPolygon(String color, Double[] boundaries)
 	{
 		Polygon tempPoly = new Polygon();
-		tempPoly.setFill(Color.valueOf(color)); 
-		tempPoly.setStroke(Color.BLACK); 
+
+		//tempPoly.setFill(Color.valueOf(color)); 
+		tempPoly.setFill(new Color(1f,0f,0f,.1f ));
+		
+		tempPoly.setStroke(Color.BLACK);
+		tempPoly.setStrokeWidth(5);
+		//tempPoly.setVisible(false);
 		tempPoly.getPoints().addAll(boundaries);
 		return tempPoly;
 	}
