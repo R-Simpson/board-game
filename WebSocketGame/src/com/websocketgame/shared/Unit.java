@@ -61,7 +61,7 @@ public class Unit implements Serializable {
 			this.shape.setFill(Color.GREEN);
 			break;
 		case 4:
-			this.shape.setFill(Color.ORANGE);
+			this.shape.setFill(Color.GREY);
 			break;
 		case 5:
 			this.shape.setFill(Color.PURPLE);
