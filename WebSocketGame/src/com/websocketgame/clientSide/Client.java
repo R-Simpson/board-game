@@ -10,9 +10,11 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -61,6 +63,7 @@ public class Client extends Application {
 //			root.setMinSize(150, 150);
 //			root.setMaxSize(150, 150);
 			
+				
 			Image image = new Image("file:res/got.jpg");
 	        ImageView iv1 = new ImageView();
 	        iv1.setImage(image);
@@ -93,14 +96,25 @@ public class Client extends Application {
 			//pane.setScaleX(0.5);
 			//pane.setScaleY(0.5);
 			
+			
+	        Slider slider = new Slider(0.3,1,0.52);
+	        ZoomPane zoomPane = new ZoomPane(pane);
+	        zoomPane.zoomFactorProperty().bind(slider.valueProperty());
+	        
+			ScrollPane scrollPane = new ScrollPane(zoomPane);
+			scrollPane.setFitToWidth(true);
+			//scrollPane.setMinHeight(800);
+			//scrollPane.setMaxHeight(800);
 
-			final ScrollPane scroll = new ScrollPane();
-			scroll.setContent(pane);
-			scroll.setFitToWidth(true);
-			
-			scroll.setMinHeight(800);
-			scroll.setMaxHeight(800);
-			
+    
+	        stage.setScene(new Scene(new BorderPane(scrollPane, slider, null, null, null)));	
+	        stage.setWidth(800);
+	        stage.setHeight(600);	        	        
+	        
+	        stage.show();
+	        
+	        
+
 			// not helping
 			/*
 		    final StackPane stack = new StackPane();
@@ -108,11 +122,7 @@ public class Client extends Application {
 		    StackPane.setAlignment(root, Pos.TOP_LEFT);
 		    stack.setStyle("-fx-background-color: blue;");
 			*/
-					
-			stage.setScene(new Scene(scroll));
-			stage.setResizable(false);
-			stage.show();	
-
+			 
 		} catch (ConnectException e1) {
 			System.out.println("Unable to reach server");
 		}
