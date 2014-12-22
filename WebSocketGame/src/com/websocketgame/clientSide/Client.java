@@ -96,6 +96,8 @@ public class Client extends Application {
 			//pane.setScaleX(0.5);
 			//pane.setScaleY(0.5);
 			
+			pane.setStyle("-fx-background-color: teal;");
+
 			
 	        Slider slider = new Slider(0.3,1,0.52);
 	        ZoomPane zoomPane = new ZoomPane(pane);
@@ -113,8 +115,6 @@ public class Client extends Application {
 	        
 	        stage.show();
 	        
-	        
-
 			// not helping
 			/*
 		    final StackPane stack = new StackPane();
