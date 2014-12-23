@@ -48,7 +48,17 @@ public class UserService implements Runnable {
 		while(true)
 		{
 			try {
-				PlayerMessage message = (PlayerMessage) in.readObject();
+				
+				PlayerMessage message = null;
+				
+				Object object = in.readObject();
+				
+				if (object instanceof PlayerMessage)
+				{
+					message = (PlayerMessage)object;
+				}
+				
+				//PlayerMessage message = (PlayerMessage) in.readObject();
 				// validate & alter game state
 				
 				Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
