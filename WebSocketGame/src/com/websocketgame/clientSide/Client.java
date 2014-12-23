@@ -104,7 +104,7 @@ public class Client extends Application {
 	        zoomPane.zoomFactorProperty().bind(slider.valueProperty());
 	        
 			ScrollPane scrollPane = new ScrollPane(zoomPane);
-			scrollPane.setFitToWidth(true);
+			//scrollPane.setFitToWidth(true);
 			//scrollPane.setMinHeight(800);
 			//scrollPane.setMaxHeight(800);
 
