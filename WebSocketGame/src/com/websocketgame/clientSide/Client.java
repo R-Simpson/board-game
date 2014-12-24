@@ -37,7 +37,8 @@ public class Client extends Application {
 	static ObjectOutputStream out;
 	static int playerid;
 	private Pane pane;
-	// private Stage stage;
+	private TextArea textArea;
+
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -68,10 +69,7 @@ public class Client extends Application {
 			inputThread.start();
 
 			pane = new Pane();
-//			root.setMinSize(150, 150);
-//			root.setMaxSize(150, 150);
-			
-				
+	
 			Image image = new Image("file:res/got.jpg");
 	        ImageView iv1 = new ImageView();
 	        iv1.setImage(image);
@@ -100,10 +98,6 @@ public class Client extends Application {
 			
 			refreshDisplay();
 			
-			// resizes correctly but is orientated centrally, not top left
-			//pane.setScaleX(0.5);
-			//pane.setScaleY(0.5);
-			
 			pane.setStyle("-fx-background-color: teal;");
 
 			
@@ -111,13 +105,9 @@ public class Client extends Application {
 	        ZoomPane zoomPane = new ZoomPane(pane);
 	        zoomPane.zoomFactorProperty().bind(slider.valueProperty());
 	        
-			ScrollPane scrollPane = new ScrollPane(zoomPane);
-					
+			ScrollPane scrollPane = new ScrollPane(zoomPane);				
 			scrollPane.setMinWidth(540);
-			
-			//scrollPane.setMinHeight(800);
-			//scrollPane.setMaxHeight(800);
-			
+
 			// adding another Pane for chat
 			
 			
@@ -132,7 +122,7 @@ public class Client extends Application {
 		    hbox.setHgrow(textField, Priority.ALWAYS);
 
 
-			TextArea textArea = new TextArea();
+			textArea = new TextArea();
 			textArea.setEditable(false);
 			textArea.setFocusTraversable(false);
 			textArea.setWrapText(true);
@@ -210,6 +200,11 @@ public class Client extends Application {
 				}
 			}
 		}
+	}
+	
+	void updateChat(String string)
+	{
+		textArea.appendText(string + "\n");
 	}
 }
 

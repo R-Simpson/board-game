@@ -61,7 +61,7 @@ public class UserService implements Runnable {
 				if (message.getPlayerId() == Game.INSTANCE.getPlayerTurn())
 				{
 					Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
-					Game.INSTANCE.nextPlayerTurn();
+					int playerTurn = Game.INSTANCE.nextPlayerTurn();
 					
 					for(int i = 0; i < 6; i++)	// replace '6' with player count set by server on start up
 					{
@@ -70,6 +70,9 @@ public class UserService implements Runnable {
 							// create new message from game state and send back, don't just parrot playerMessage
 							user[i].out.writeObject(message);
 							user[i].out.flush();
+							
+							user[i].out.writeObject("It is now player " + playerTurn + "'s turn");
+							
 							System.out.println("Updated game value and sent back to client " + i);
 						}
 					}

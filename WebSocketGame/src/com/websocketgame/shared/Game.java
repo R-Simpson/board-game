@@ -68,10 +68,11 @@ public enum Game {
 		return playerTurn;
 	}
 	
-	public void nextPlayerTurn()
+	public int nextPlayerTurn()
 	{
 		playerTurn = (int) (((playerTurn+1)==players) ?  0 : playerTurn+1); 
 		// add player 'active' boolean to skip players who have been removed from game
+		return playerTurn;
 	}
 	
 	

@@ -37,32 +37,21 @@ public class Input implements Runnable{
 						public void run() {
 							Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
 							client.refreshDisplay();
-
-							// yikes at this code duplciation - need to move this loop through lands elsewhere or find another solution
-							// also this will likely draw the 'unit' over existing units? Need to clear first?
-							// Clearing and rebuilding every time - seems dumb. How to update & refresh?
-							// Land 8 is unaffected too - due to counting from '1'?
-							/*
-						for(Land land: Game.INSTANCE.getGameState()){	
-							//client.root.getChildren().clear();
-							//client.root.getChildren().add(land.getPolygon());
-
-							client.root.getChildren().setAll(land.getPolygon());
-
-							if (land.getUnit() != null)
-							{
-								System.out.println("Adding a unit for land " + land.getLandId());
-
-								client.root.getChildren().add(land.getUnit().getShape());
-							}	
-						}
-							 */
 						}
 					});				
 				}
 				
 				else if (object instanceof String)
 				{
+					String string = (String)object;
+					
+					Platform.runLater(new Runnable() {	// GUI updates MUST be run on the JavaFX thread - run at 'some unspecified time in the future'
+						@Override
+						public void run() {
+							client.updateChat(string);
+						}
+					});		
+
 					System.out.println(object);
 				}
 				
