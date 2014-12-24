@@ -162,19 +162,13 @@ public class Client extends Application {
 			
 			// end: adding another pane for chat
 			
-			
-			BorderPane borderPane = new BorderPane();
-			borderPane.setRight(stackPane);
-			borderPane.setCenter(scrollPane);
-			borderPane.setTop(slider);
-
-			
-			
-	        stage.setScene(new Scene(borderPane));	
-	        stage.setWidth(1040);
+						
+	        stage.setScene(new Scene(new BorderPane(scrollPane, slider, stackPane, null, null)));	
 	        stage.setMinWidth(1040);
-	        stage.setHeight(600);
 	        stage.setMinHeight(500);
+	        
+	        stage.setWidth(1040);
+	        stage.setHeight(1000);
 	        
 	        stage.show();
 	        
