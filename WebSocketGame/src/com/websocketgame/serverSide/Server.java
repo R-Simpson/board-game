@@ -12,8 +12,6 @@ public class Server {
 
 	static ServerSocket serverSocket;
 	static UserService[] user = new UserService[6];
-	// static Game game;
-
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -35,7 +33,6 @@ public class Server {
 			}
 		}
 			
-		
 		while(true)
 		{
 			Socket socket = serverSocket.accept();

@@ -48,31 +48,37 @@ public class UserService implements Runnable {
 		while(true)
 		{
 			try {
-				
+
 				PlayerMessage message = null;
-				
+
 				Object object = in.readObject();
-				
+
 				if (object instanceof PlayerMessage)
 				{
 					message = (PlayerMessage)object;
 				}
-				
-				//PlayerMessage message = (PlayerMessage) in.readObject();
-				// validate & alter game state
-				
-				Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
-				
-				for(int i = 0; i < 6; i++)
+
+				if (message.getPlayerId() == Game.INSTANCE.getPlayerTurn())
 				{
-					if(user[i] != null)
+					Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
+					Game.INSTANCE.nextPlayerTurn();
+					
+					for(int i = 0; i < 6; i++)	// replace '6' with player count set by server on start up
 					{
-						// create new message from game state and send back, don't just parrot playerMessage
-						user[i].out.writeObject(message);
-						user[i].out.flush();
-						System.out.println("Updated game value and sent back to client " + i);
+						if(user[i] != null)
+						{
+							// create new message from game state and send back, don't just parrot playerMessage
+							user[i].out.writeObject(message);
+							user[i].out.flush();
+							System.out.println("Updated game value and sent back to client " + i);
+						}
 					}
 				}
+				else
+				{
+					user[message.getPlayerId()].out.writeObject("It's not your turn yet, waiting for player " + Game.INSTANCE.getPlayerTurn());
+				}
+
 			} catch (IOException e) {
 				user[pid] = null;
 				System.out.println("Player " + pid + " disconnected");

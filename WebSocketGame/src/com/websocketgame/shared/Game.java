@@ -11,19 +11,6 @@ import javafx.scene.shape.Polygon;
 
 public enum Game {
 	INSTANCE;
-
-	// test board
-	/*
-	private List<Land> gameState  = new ArrayList<Land>(Arrays.asList(
-			new Land(0, "WHITE", new Double[]{0.0,0.0, 50.0,0.0, 40.0,20.0, 50.0,40.0, 0.0,50.0}, new int[]{2,4}), 
-			new Land(1, "WHITE", new Double[]{50.0,0.0, 40.0,20.0, 50.0,40.0, 100.0,50.0, 90.0,40.0, 100.0,20.0, 90.0,10.0, 100.0,0.0}, new int[]{1,3,4}), 
-			new Land(2, "WHITE", new Double[]{100.0,0.0, 90.0,10.0, 100.0,20.0, 90.0,40.0, 100.0,50.0, 150.0,70.0, 150.0,0.0}, new int[]{2,5}),
-			new Land(3, "WHITE", new Double[]{0.0,50.0, 50.0,40.0, 100.0,50.0, 90.0,100.0, 0.0,100.0}, new int[]{1,2,5,6}), 
-			new Land(4, "WHITE", new Double[]{100.0,50.0, 150.0,70.0, 150.0,150.0, 120.0,150.0, 90.0,100.0}, new int[]{3,4,6,8}), 
-			new Land(5, "WHITE", new Double[]{0.0,100.0, 90.0,100.0, 120.0,150.0, 0.0,150.0}, new int[]{4,5,7,8}),
-			new Land(6, "WHITE", new Double[]{0.0,150.0, 80.0,150.0, 90.0,170.0, 70.0,200.0, 0.0, 200.00}, new int[]{6,8}),
-			new Land(7, "WHITE", new Double[]{100.0,150.0, 150.0,150.0, 150.0,200.0, 70.0,200.0, 90.0,170.00, 80.0,150.0}, new int[]{5,6,7})));
-	*/
 	
 	Double[] dbl0 = new Double[]{756.0,0.0,1012.0,-10.0,1048.0,64.0,1068.0,124.0,1076.0,178.0,1046.0,170.0,1000.0,142.0,954.0,172.0,952.0,192.0,888.0,160.0,860.0,182.0,818.0,184.0,778.0,212.0,732.0,258.0,670.0,278.0,600.0,264.0,604.0,250.0,632.0,216.0,624.0,194.0,646.0,160.0,622.0,122.0,684.0,82.0,706.0,82.0,710.0,56.0};
 	Double[] dbl1 = new Double[]{1088.0,426.0,1086.0,380.0,1072.0,328.0,1042.0,292.0,1014.0,280.0,954.0,192.0,954.0,174.0,1002.0,146.0,1054.0,176.0,1074.0,176.0,1100.0,168.0,1114.0,182.0,1164.0,188.0,1214.0,216.0,1226.0,194.0,1278.0,188.0,1298.0,272.0,1286.0,310.0,1260.0,376.0,1242.0,352.0,1216.0,342.0,1208.0,314.0,1204.0,370.0,1186.0,426.0,1146.0,432.0,1148.0,456.0,1138.0,458.0,1110.0,434.0,1092.0,428.0};
@@ -48,7 +35,6 @@ public enum Game {
 	Double[] dbl20 = new Double[]{1246.0,1486.0,1220.0,1516.0,1186.0,1514.0,1186.0,1534.0,1148.0,1532.0,1148.0,1550.0,1134.0,1554.0,1126.0,1542.0,1114.0,1542.0,1114.0,1554.0,1078.0,1576.0,1086.0,1592.0,1056.0,1610.0,1036.0,1652.0,1002.0,1652.0,976.0,1654.0,960.0,1654.0,936.0,1644.0,880.0,1668.0,866.0,1686.0,838.0,1650.0,844.0,1622.0,830.0,1608.0,834.0,1596.0,858.0,1594.0,870.0,1590.0,880.0,1512.0,872.0,1506.0,860.0,1428.0,876.0,1430.0,942.0,1464.0,950.0,1468.0,966.0,1488.0,1014.0,1508.0,1032.0,1506.0,1058.0,1492.0,1086.0,1492.0,1130.0,1508.0,1146.0,1502.0,1164.0,1488.0,1190.0,1470.0,1210.0,1466.0,1266.0,1414.0,1264.0,1450.0,1232.0,1468.0} ;
 	Double[] dbl21 = new Double[]{914.0,1894.0,962.0,1896.0,1004.0,1872.0,1068.0,1822.0,1108.0,1796.0,1102.0,1752.0,1056.0,1768.0,994.0,1784.0,958.0,1780.0,958.0,1762.0,968.0,1756.0,958.0,1740.0,992.0,1736.0,992.0,1726.0,1008.0,1704.0,1026.0,1704.0,1026.0,1726.0,1038.0,1708.0,1048.0,1676.0,1062.0,1668.0,1060.0,1648.0,1030.0,1654.0,966.0,1656.0,936.0,1648.0,886.0,1662.0,866.0,1688.0,862.0,1742.0,860.0,1778.0,866.0,1800.0,862.0,1850.0,874.0,1866.0,894.0,1876.0};
 
-	
 	private List<Land> gameState  = new ArrayList<Land>(Arrays.asList(
 			new Land(0, "WHITE", dbl0, new int[]{1}), 
 			new Land(1, "WHITE", dbl1, new int[]{1}),
@@ -73,6 +59,49 @@ public enum Game {
 			new Land(20, "WHITE", dbl20, new int[]{1}),
 			new Land(21, "WHITE", dbl21, new int[]{1})));
 	
+	private int playerTurn = 0;
+	
+	private int players = 6; // entered by server on start up
+	
+	public int getPlayerTurn()
+	{
+		return playerTurn;
+	}
+	
+	public void nextPlayerTurn()
+	{
+		playerTurn = (int) (((playerTurn+1)==players) ?  0 : playerTurn+1); 
+		// add player 'active' boolean to skip players who have been removed from game
+	}
+	
+	
+	public static int switchPlayer(int currentPlayer, boolean[] playerList) {
+	    // if the current player + 1 = length (size) of array,
+	    // start back at the beginning and find the first player still playing
+	    if(currentPlayer + 1 == playerList.length) {
+	        for(int i = 0; i < playerList.length; i++) {
+	            if(playerList[i] == true) {    // if player is still in the game
+	                currentPlayer = i;         // currentPlayer = current index of array
+	                break;
+	            }
+	        }
+	    }
+	    // otherwise the current player number + 1 is not at the end of the array
+	    // i.e. it is less than the length (size) of the array, so find the next player
+	    // still playing
+	    else {
+	        for(int i = (currentPlayer+1); i < playerList.length; i++) {
+	            if(playerList[i] == true) {
+	                currentPlayer = i;
+	                break;
+	            }
+	        }
+	    }
+	    return currentPlayer;
+	}
+	
+	
+	
 	public List<Land> getGameState()
 	{
 		return gameState;
@@ -91,37 +120,37 @@ public enum Game {
 				case 0:
 					land.setColor("RED");
 					land.addUnit(new Unit(pid,1,land));
-					System.out.println("Added unit 1,1 to land " + land.getLandId());
+					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 1:
 					land.setColor("BLUE");
 					land.addUnit(new Unit(pid,1,land));
-					System.out.println("Added unit 1,1 to land " + land.getLandId());
+					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 2:
 					land.setColor("YELLOW");
 					land.addUnit(new Unit(pid,1,land));
-					System.out.println("Added unit 1,1 to land " + land.getLandId());
+					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 3:
 					land.setColor("GREEN");
 					land.addUnit(new Unit(pid,1,land));
-					System.out.println("Added unit 1,1 to land " + land.getLandId());
+					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 4:
 					land.setColor("BLACK");
 					land.addUnit(new Unit(pid,1,land));
-					System.out.println("Added unit 1,1 to land " + land.getLandId());
+					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 5:
 					land.setColor("PURPLE");
 					land.addUnit(new Unit(pid,1,land));
-					System.out.println("Added unit 1,1 to land " + land.getLandId());
+					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				}

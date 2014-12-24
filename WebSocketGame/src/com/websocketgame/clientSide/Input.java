@@ -28,7 +28,6 @@ public class Input implements Runnable{
 
 				if (object instanceof PlayerMessage)
 				{
-
 					PlayerMessage message = (PlayerMessage)object;
 
 					System.out.println("Message received from player : " + message.getPlayerId() + " - Order : " + message.getPlayerOrder());
@@ -61,12 +60,12 @@ public class Input implements Runnable{
 						}
 					});				
 				}
-				/*
-				else if (object instanceof null)
+				
+				else if (object instanceof String)
 				{
-					// chat message
+					System.out.println(object);
 				}
-				*/
+				
 				
 			}  catch (IOException e) {
 				System.out.println("Server disconnected");
