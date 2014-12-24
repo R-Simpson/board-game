@@ -100,8 +100,6 @@ public enum Game {
 	    return currentPlayer;
 	}
 	
-	
-	
 	public List<Land> getGameState()
 	{
 		return gameState;

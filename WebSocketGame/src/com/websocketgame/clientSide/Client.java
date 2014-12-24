@@ -7,15 +7,23 @@ import java.net.Socket;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import com.websocketgame.shared.Game;
@@ -99,19 +107,74 @@ public class Client extends Application {
 			pane.setStyle("-fx-background-color: teal;");
 
 			
-	        Slider slider = new Slider(0.3,1,0.52);
+	        Slider slider = new Slider(0.36,1,0.36);
 	        ZoomPane zoomPane = new ZoomPane(pane);
 	        zoomPane.zoomFactorProperty().bind(slider.valueProperty());
 	        
 			ScrollPane scrollPane = new ScrollPane(zoomPane);
-			//scrollPane.setFitToWidth(true);
+					
+			scrollPane.setMinWidth(540);
+			
 			//scrollPane.setMinHeight(800);
 			//scrollPane.setMaxHeight(800);
+			
+			// adding another Pane for chat
+			
+			
+			final TextField textField = new TextField();
 
-    
-	        stage.setScene(new Scene(new BorderPane(scrollPane, slider, null, null, null)));	
-	        stage.setWidth(800);
-	        stage.setHeight(600);	        	        
+			Button sendButton = new Button();
+			sendButton.setText("Send");
+			sendButton.setDefaultButton(true);  
+			
+			HBox hbox = new HBox();
+			hbox.getChildren().addAll(textField,sendButton);
+		    hbox.setHgrow(textField, Priority.ALWAYS);
+
+
+			TextArea textArea = new TextArea();
+			textArea.setEditable(false);
+			textArea.setFocusTraversable(false);
+			textArea.setWrapText(true);
+			textArea.setPrefHeight(1000);
+			
+
+			VBox vbox = new VBox();
+			vbox.getChildren().addAll(textArea, hbox);
+			
+			
+			StackPane stackPane = new StackPane();
+
+			sendButton.setOnAction(new EventHandler<ActionEvent>(){
+
+				@Override
+				public void handle(ActionEvent arg0) {
+
+					if (textField.getLength() > 0)
+					{
+						textArea.appendText(textField.getText() + "\n");
+						textField.clear();
+					}
+				}
+			});
+			
+			stackPane.getChildren().add(vbox);
+			
+			// end: adding another pane for chat
+			
+			
+			BorderPane borderPane = new BorderPane();
+			borderPane.setRight(stackPane);
+			borderPane.setCenter(scrollPane);
+			borderPane.setTop(slider);
+
+			
+			
+	        stage.setScene(new Scene(borderPane));	
+	        stage.setWidth(1040);
+	        stage.setMinWidth(1040);
+	        stage.setHeight(600);
+	        stage.setMinHeight(500);
 	        
 	        stage.show();
 	        
