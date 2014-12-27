@@ -71,7 +71,7 @@ public class UserService implements Runnable {
 							user[i].out.writeObject(message);
 							user[i].out.flush();
 							
-							user[i].out.writeObject("It is now player " + playerTurn + "'s turn");
+							user[i].out.writeObject("GAME: It is now player " + playerTurn + "'s turn");
 							
 							System.out.println("Updated game value and sent back to client " + i);
 						}
@@ -79,7 +79,7 @@ public class UserService implements Runnable {
 				}
 				else
 				{
-					user[message.getPlayerId()].out.writeObject("It's not your turn yet, waiting for player " + Game.INSTANCE.getPlayerTurn());
+					user[message.getPlayerId()].out.writeObject("GAME: It's not your turn yet, waiting for player " + Game.INSTANCE.getPlayerTurn());
 				}
 
 			} catch (IOException e) {

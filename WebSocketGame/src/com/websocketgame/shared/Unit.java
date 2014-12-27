@@ -32,7 +32,7 @@ public class Unit implements Serializable {
 			Circle circle = new Circle();
 			circle.setCenterX(land.getCentroid()[0]);
 			circle.setCenterY(land.getCentroid()[1]);					
-			circle.setRadius(5.0);
+			circle.setRadius(10.0);
 			circle.setStroke(Color.BLACK);
 			this.shape = circle;
 		}
@@ -68,13 +68,15 @@ public class Unit implements Serializable {
 			break;
 		}
 
+		/*
 		this.shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e) {
 				if (shape instanceof Circle)
 				{
 					if (((Circle) shape).getRadius() == 10.0)
 					{
-						((Circle) shape).setRadius(5.0); 
+						((Circle) shape).setRadius(5.0);
+						
 					}
 					else
 					{
@@ -97,6 +99,7 @@ public class Unit implements Serializable {
 				System.out.println("UNIT CLICKED");
 			}
 		});
+		*/
 	}
 
 	public Shape getShape() {
@@ -106,6 +109,11 @@ public class Unit implements Serializable {
 	public Unit getUnit()
 	{
 		return this;
+	}
+	
+	public Land getLand()
+	{
+		return land;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream stream) throws IOException {

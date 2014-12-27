@@ -24,11 +24,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 import com.websocketgame.shared.Game;
 import com.websocketgame.shared.Land;
 import com.websocketgame.shared.PlayerMessage;
+import com.websocketgame.shared.Unit;
 
 public class Client extends Application {
 
@@ -37,16 +41,21 @@ public class Client extends Application {
 	static ObjectOutputStream out;
 	static int playerid;
 	private Pane pane;
-	private TextArea textArea;
+	private ChatPane chatPane;
+	private Unit selectedUnit;
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		
+		pane = new Pane();
+		chatPane = new ChatPane();
+		chatPane.setDebug(true);
 
 		// Connect to server
-		System.out.println("Connecting...");
-		try {
+		updateDebug("Connecting...");
+		try {	
 			socket = new Socket("localhost",7777);
-			System.out.println("Connected");
+			updateDebug("Connected");
 
 			// Set up input stream
 			in = new ObjectInputStream(socket.getInputStream());
@@ -56,19 +65,18 @@ public class Client extends Application {
 			out.flush();
 
 			playerid = in.readInt();
-			System.out.println("Assigned Player Id : " + playerid);
+			updateDebug("Assigned Player Id : " + playerid);
 
 			Game.INSTANCE.setGameState((List<Land>) in.readObject());
 
-			System.out.println("Set gameState as defined by server");
+			updateDebug("Set gameState as defined by server");
 
 			Input input = new Input(in, this);
 			Thread inputThread = new Thread(input);
 			inputThread.setDaemon(true); // so thread will terminate when closing stage
 			inputThread.start();
 
-			pane = new Pane();
-	
+			// Move following to GamePane class?
 			Image image = new Image("file:res/got.jpg");
 	        ImageView iv1 = new ImageView();
 	        iv1.setImage(image);
@@ -78,23 +86,32 @@ public class Client extends Application {
 			{	
 				pane.getChildren().add(land.getPolygon());
 				
-				land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-					public void handle(MouseEvent e) {	
-						try {
-							PlayerMessage message = new PlayerMessage(playerid, land.getLandId());					
-							out.writeObject(message);
-							System.out.println("Send message from client " + playerid + " to claim " + land.getLandId() 
-									+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
 
-						} catch (IOException e1) {
-							System.out.println("Unable to send message to server");
+				
+				land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+					public void handle(MouseEvent e) {
+						
+						if (selectedUnit != null)
+						{
+							try {
+								PlayerMessage message = new PlayerMessage(playerid, land.getLandId());					
+								out.writeObject(message);
+								updateDebug("Send message from client " + playerid + " to claim " + land.getLandId() 
+										+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
+
+							} catch (IOException e1) {
+								updateDebug("Unable to send message to server");
+							}
 						}
+						else
+						{
+							updateChat("GAME: Select a unit to move first");
+						}
+
 					}
 				});
 			}
-			
-			refreshDisplay();
-			
+
 			pane.setStyle("-fx-background-color: teal;");
 		
 	        Slider slider = new Slider(0.36,1,0.36);
@@ -103,47 +120,10 @@ public class Client extends Application {
 	        
 			ScrollPane scrollPane = new ScrollPane(zoomPane);				
 			scrollPane.setMinWidth(540);
-
-			// adding another Pane for chat
-			final TextField textField = new TextField();
-
-			Button sendButton = new Button();
-			sendButton.setText("Send");
-			sendButton.setDefaultButton(true);  
 			
-			HBox hbox = new HBox();
-			hbox.getChildren().addAll(textField,sendButton);
-		    hbox.setHgrow(textField, Priority.ALWAYS);
-
-			textArea = new TextArea();
-			textArea.setEditable(false);
-			textArea.setFocusTraversable(false);
-			textArea.setWrapText(true);
-			textArea.setPrefHeight(1000);
-
-			VBox vbox = new VBox();
-			vbox.getChildren().addAll(textArea, hbox);
-				
-			StackPane stackPane = new StackPane();
-
-			sendButton.setOnAction(new EventHandler<ActionEvent>(){
-
-				@Override
-				public void handle(ActionEvent arg0) {
-
-					if (textField.getLength() > 0)
-					{
-						textArea.appendText(textField.getText() + "\n");
-						textField.clear();
-					}
-				}
-			});
+			refreshDisplay();
 			
-			stackPane.getChildren().add(vbox);
-			
-			// end: adding another pane for chat
-							
-	        stage.setScene(new Scene(new BorderPane(scrollPane, slider, stackPane, null, null)));
+	        stage.setScene(new Scene(new BorderPane(scrollPane, slider, chatPane.getChatPane(), null, null)));
 	        stage.setMinWidth(1040);
 	        stage.setMinHeight(500);	        
 	        stage.setWidth(1040);
@@ -156,11 +136,9 @@ public class Client extends Application {
 	}
 
 	public static void main(String[] args) {
-
 		launch(args);
 	}
 	
-
 	void refreshDisplay()	// package private
 	{
 		// Better than before, but need to remove old unit / shape?
@@ -171,17 +149,63 @@ public class Client extends Application {
 			{
 				if (!pane.getChildren().contains(land.getUnit().getShape()))
 				{
-					System.out.println("Adding a unit for land " + land.getLandId());
-					pane.getChildren().add(land.getUnit().getShape());
+					updateDebug("Adding a unit for land " + land.getLandId());
+					
+					Unit unit = land.getUnit();
+					Shape shape = unit.getShape();
+					
+					pane.getChildren().add(shape);
+					
+					shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+						public void handle(MouseEvent e) {
+							if (shape instanceof Circle)
+							{
+								if (((Circle) shape).getRadius() == 20.0)
+								{
+									((Circle) shape).setRadius(10.0);
+									deselectUnit(unit);
+								}
+								else
+								{
+									((Circle) shape).setRadius(20.0); 
+									selectUnit(unit);
+								}
+							}
+							updateDebug("UNIT CLICKED");
+						}
+					});	
 				}
 			}
 		}
 	}
-	
-	void updateChat(String string)
+
+	void updateChat(String text)
 	{
-		textArea.appendText(string + "\n");
+		chatPane.writeToChatPane(text);
 	}
+	
+	void updateDebug(String string)
+	{
+		chatPane.writeDebug(string);
+	}
+	
+	public void selectUnit(Unit unit)
+	{
+		this.selectedUnit = unit;
+		updateDebug("Selected land " + unit.getLand().getLandId());
+	}
+	
+	public void deselectUnit(Unit unit)
+	{
+		this.selectedUnit = null;
+		updateDebug("Unselected land " + unit.getLand().getLandId());
+	}
+	
+	public Unit getSelectedUnit()
+	{
+		return selectedUnit;
+	}
+	
 }
 
 
