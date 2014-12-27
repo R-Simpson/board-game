@@ -39,7 +39,6 @@ public class Client extends Application {
 	private Pane pane;
 	private TextArea textArea;
 
-
 	@Override
 	public void start(Stage stage) throws Exception {
 
@@ -82,10 +81,8 @@ public class Client extends Application {
 				land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 					public void handle(MouseEvent e) {	
 						try {
-							PlayerMessage message = new PlayerMessage(playerid, land.getLandId());
-							
+							PlayerMessage message = new PlayerMessage(playerid, land.getLandId());					
 							out.writeObject(message);
-
 							System.out.println("Send message from client " + playerid + " to claim " + land.getLandId() 
 									+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
 
@@ -99,8 +96,7 @@ public class Client extends Application {
 			refreshDisplay();
 			
 			pane.setStyle("-fx-background-color: teal;");
-
-			
+		
 	        Slider slider = new Slider(0.36,1,0.36);
 	        ZoomPane zoomPane = new ZoomPane(pane);
 	        zoomPane.zoomFactorProperty().bind(slider.valueProperty());
@@ -109,8 +105,6 @@ public class Client extends Application {
 			scrollPane.setMinWidth(540);
 
 			// adding another Pane for chat
-			
-			
 			final TextField textField = new TextField();
 
 			Button sendButton = new Button();
@@ -121,18 +115,15 @@ public class Client extends Application {
 			hbox.getChildren().addAll(textField,sendButton);
 		    hbox.setHgrow(textField, Priority.ALWAYS);
 
-
 			textArea = new TextArea();
 			textArea.setEditable(false);
 			textArea.setFocusTraversable(false);
 			textArea.setWrapText(true);
 			textArea.setPrefHeight(1000);
-			
 
 			VBox vbox = new VBox();
 			vbox.getChildren().addAll(textArea, hbox);
-			
-			
+				
 			StackPane stackPane = new StackPane();
 
 			sendButton.setOnAction(new EventHandler<ActionEvent>(){
@@ -151,25 +142,14 @@ public class Client extends Application {
 			stackPane.getChildren().add(vbox);
 			
 			// end: adding another pane for chat
-			
-						
-	        stage.setScene(new Scene(new BorderPane(scrollPane, slider, stackPane, null, null)));	
+							
+	        stage.setScene(new Scene(new BorderPane(scrollPane, slider, stackPane, null, null)));
 	        stage.setMinWidth(1040);
-	        stage.setMinHeight(500);
-	        
+	        stage.setMinHeight(500);	        
 	        stage.setWidth(1040);
-	        stage.setHeight(1000);
+	        stage.setHeight(1000);        
+	        stage.show();
 	        
-	        stage.show();
-	        
-			// not helping
-			/*
-		    final StackPane stack = new StackPane();
-		    stack.getChildren().addAll(root);
-		    StackPane.setAlignment(root, Pos.TOP_LEFT);
-		    stack.setStyle("-fx-background-color: blue;");
-			*/
-			 
 		} catch (ConnectException e1) {
 			System.out.println("Unable to reach server");
 		}
@@ -183,14 +163,10 @@ public class Client extends Application {
 
 	void refreshDisplay()	// package private
 	{
-		// Clearing and rebuilding every time - seems dumb. How to update & refresh?
-		// horrible performance - out of memory errors
-		//root.getChildren().clear();
-					
-		// better, but need to remove old unit / shape?
-		
+		// Better than before, but need to remove old unit / shape?
+		System.out.println("Refreshing Display");
 		for(Land land: Game.INSTANCE.getGameState())
-		{			
+		{					
 			if (land.getUnit() != null)
 			{
 				if (!pane.getChildren().contains(land.getUnit().getShape()))

@@ -9,14 +9,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
 public class Unit implements Serializable {
-	
+
 	private static final long serialVersionUID = 0;
-	
+
 	private int owner;
 	private int type;
 	private Land land;
 	private transient Shape shape;
-	
+
 	public Unit(int owner, int type, Land land)
 	{
 		this.owner = owner;
@@ -24,7 +24,7 @@ public class Unit implements Serializable {
 		this.land = land;
 		setUpShape(owner, type, land);
 	}
-	
+
 	private void setUpShape(int owner, int type, Land land)
 	{
 		if (type==1)
@@ -46,7 +46,7 @@ public class Unit implements Serializable {
 			square.setStroke(Color.BLACK);
 			this.shape = square;
 		}
-	
+
 		switch (owner){
 		case 0:
 			this.shape.setFill(Color.RED);
@@ -67,18 +67,34 @@ public class Unit implements Serializable {
 			this.shape.setFill(Color.PURPLE);
 			break;
 		}
-		
+
 		this.shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
 			public void handle(MouseEvent e) {
-			if (shape instanceof Circle)
-			{
-				((Circle) shape).setRadius(10.0); 
-			}
-			else if (shape instanceof Rectangle)
-			{
-				((Rectangle) shape).setWidth(20.0);
-				((Rectangle) shape).setHeight(20.0);
-			}
+				if (shape instanceof Circle)
+				{
+					if (((Circle) shape).getRadius() == 10.0)
+					{
+						((Circle) shape).setRadius(5.0); 
+					}
+					else
+					{
+						((Circle) shape).setRadius(10.0); 
+					}
+				}
+				else if (shape instanceof Rectangle)
+				{	
+					if (((Rectangle) shape).getWidth() == 20.0)
+					{
+						((Rectangle) shape).setWidth(10.0);
+						((Rectangle) shape).setHeight(10.0);
+					}
+					else
+					{
+						((Rectangle) shape).setWidth(20.0);
+						((Rectangle) shape).setHeight(20.0);
+					}
+				}
+				System.out.println("UNIT CLICKED");
 			}
 		});
 	}
@@ -86,24 +102,24 @@ public class Unit implements Serializable {
 	public Shape getShape() {
 		return shape;
 	}
-	
+
 	public Unit getUnit()
 	{
 		return this;
 	}
-	
-    private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
-    	stream.writeInt(owner);
-    	stream.writeInt(type);
-    	stream.writeObject(land);
-    	System.out.println("Writing unit with owner " + owner + ", type " + type);
-    }
-	
-    private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {   	
-    	this.owner =  stream.readInt();
-    	this.type =  stream.readInt();
-    	this.land = (Land) stream.readObject();
-    	setUpShape(owner, type, land);
+
+	private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
+		stream.writeInt(owner);
+		stream.writeInt(type);
+		stream.writeObject(land);
+		System.out.println("Writing unit with owner " + owner + ", type " + type);
 	}
-	
+
+	private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {   	
+		this.owner =  stream.readInt();
+		this.type =  stream.readInt();
+		this.land = (Land) stream.readObject();
+		setUpShape(owner, type, land);
+	}
+
 }
