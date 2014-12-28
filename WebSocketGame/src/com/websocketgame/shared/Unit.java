@@ -41,8 +41,8 @@ public class Unit implements Serializable {
 			Rectangle square = new Rectangle();
 			square.setLayoutX(land.getCentroid()[0]);
 			square.setLayoutY(land.getCentroid()[1]);
-			square.setWidth(10.0);
-			square.setHeight(10.0);
+			square.setWidth(20.0);
+			square.setHeight(20.0);
 			square.setStroke(Color.BLACK);
 			this.shape = square;
 		}
@@ -67,39 +67,6 @@ public class Unit implements Serializable {
 			this.shape.setFill(Color.PURPLE);
 			break;
 		}
-
-		/*
-		this.shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
-			public void handle(MouseEvent e) {
-				if (shape instanceof Circle)
-				{
-					if (((Circle) shape).getRadius() == 10.0)
-					{
-						((Circle) shape).setRadius(5.0);
-						
-					}
-					else
-					{
-						((Circle) shape).setRadius(10.0); 
-					}
-				}
-				else if (shape instanceof Rectangle)
-				{	
-					if (((Rectangle) shape).getWidth() == 20.0)
-					{
-						((Rectangle) shape).setWidth(10.0);
-						((Rectangle) shape).setHeight(10.0);
-					}
-					else
-					{
-						((Rectangle) shape).setWidth(20.0);
-						((Rectangle) shape).setHeight(20.0);
-					}
-				}
-				System.out.println("UNIT CLICKED");
-			}
-		});
-		*/
 	}
 
 	public Shape getShape() {

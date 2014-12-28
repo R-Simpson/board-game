@@ -124,13 +124,13 @@ public class Client extends Application {
 	public void selectUnit(Unit unit)
 	{
 		this.selectedUnit = unit;
-		updateDebug("Selected land " + unit.getLand().getLandId());
+		updateDebug("Selected unit at land " + unit.getLand().getLandId());
 	}
 	
 	public void deselectUnit(Unit unit)
 	{
 		this.selectedUnit = null;
-		updateDebug("Unselected land " + unit.getLand().getLandId());
+		updateDebug("Deselected unit at land " + unit.getLand().getLandId());
 	}
 		
 	public Unit getSelectedUnit()

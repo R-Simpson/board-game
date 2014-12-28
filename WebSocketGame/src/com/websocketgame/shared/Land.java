@@ -3,6 +3,7 @@ package com.websocketgame.shared;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -122,6 +123,7 @@ public class Land implements Serializable {
     	stream.writeObject(color);
     	stream.writeObject(boundaries);
     	stream.writeObject(centroid);
+    	stream.writeObject(adjacentLands);
     	stream.writeObject(unit);
     	System.out.println("Writing land " + id + ", color " + color);
     }
@@ -132,8 +134,9 @@ public class Land implements Serializable {
     	this.color = (String) stream.readObject();
     	this.boundaries = (Double[]) stream.readObject();
 		this.centroid = (Double[]) stream.readObject();
+		this.adjacentLands = (int[]) stream.readObject();
 		this.unit = (Unit) stream.readObject();
 		this.polygon = setUpPolygon(color, boundaries); // set up Polygon (transient) from boundaries & colour
 		System.out.println("Reading land " + id + ", color " + color);
-	}
+	}    
 }

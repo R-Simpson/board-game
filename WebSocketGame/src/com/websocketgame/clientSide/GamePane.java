@@ -28,11 +28,11 @@ public class GamePane {
 	private Slider slider;
 	private Client client;
 	private Group unitGroup;
-	
+
 	public GamePane(Client client)
 	{
 		this.client = client;
-		
+
 		pane = new Pane();
 		Image image = new Image("file:res/got.jpg");
 		ImageView iv1 = new ImageView();
@@ -48,15 +48,33 @@ public class GamePane {
 
 					if (client.getSelectedUnit() != null)
 					{
-						try {
-							PlayerMessage message = new PlayerMessage(client.playerid, land.getLandId());					
-							client.out.writeObject(message);
-							
-							client.updateDebug("Send message from client " + client.playerid + " to claim " + land.getLandId() 
-									+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
+						// Should we do this on the server side? Would make client thinner but results should be same; as is there's only one map..
+						boolean adjacent = false;				
+						for (int adjacentLand : client.getSelectedUnit().getLand().getAdjacency())
+						{
+							if (adjacentLand == land.getLandId())
+							{
+								adjacent = true;
+							}
+						}
 
-						} catch (IOException e1) {
-							client.updateDebug("Unable to send message to server");
+
+						if (adjacent)
+						{
+							try {
+								PlayerMessage message = new PlayerMessage(client.playerid, land.getLandId());					
+								client.out.writeObject(message);
+
+								client.updateDebug("Send message from client " + client.playerid + " to claim " + land.getLandId() 
+										+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
+
+							} catch (IOException e1) {
+								client.updateDebug("Unable to send message to server");
+							}
+						}
+						else
+						{
+							client.updateChat("GAME: Can't move that unit there, select an adjacent land");
 						}
 					}
 					else
@@ -76,20 +94,20 @@ public class GamePane {
 
 		scrollPane = new ScrollPane(zoomPane);				
 		scrollPane.setMinWidth(540);
-		
+
 		unitGroup = new Group();
 	}
-	
+
 	public ScrollPane getGamePane()
 	{
 		return scrollPane;
 	}
-	
+
 	public Slider getSlider()
 	{
 		return slider;
 	}
-	
+
 	void refreshDisplay()	// package private
 	{
 		// Better than before, but need to remove old unit / shape?
@@ -101,107 +119,51 @@ public class GamePane {
 				if (!unitGroup.getChildren().contains(land.getUnit().getShape()))
 				{
 					client.updateDebug("Adding a unit for land " + land.getLandId());
-					
+
 					Unit unit = land.getUnit();
 					Shape shape = unit.getShape();
-								
+
 					// Using Group to try and get a handle on these shapes to resize all (when a unit is selected, deselect all others)
 					unitGroup.getChildren().add(shape); 
-					
+
 					// Need to remove every time to prevent duplicate child error...
 					pane.getChildren().removeAll(unitGroup);
 					pane.getChildren().add(unitGroup);
-					
-					shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
-						public void handle(MouseEvent e) {
-							if (shape instanceof Circle)
-							{
-								if (shape.getScaleX() == 2)
-								{
-									shape.setScaleX(1);
-									shape.setScaleY(1);
-									client.deselectUnit(unit);
-								}
-								else
-								{
-									// Moves all units down and right, could use to offset more than one unit per land?
-									//unitGroup.setTranslateX(10);
-									//unitGroup.setTranslateY(10);
-									
-									// shrink all other units to indicate deselection when a new unit is selected.
-									Iterator<Node> iterator = unitGroup.getChildren().iterator();
-					                  while (iterator.hasNext()) {
-					                    Node next = iterator.next();
-					                    next.setScaleX(1);
-					                    next.setScaleY(1);
-					                  }
 
-									shape.setScaleX(2);
-									shape.setScaleY(2);
-									client.selectUnit(unit);
-								}
-									
-								/*if (((Circle) shape).getRadius() == 20.0)
-								{
-									((Circle) shape).setRadius(10.0);
-									client.deselectUnit(unit);
-								}
-								else
-								{
-									((Circle) shape).setRadius(20.0); 
-									// unitGroup.setScaleX(1);
-									
-									shape.setScaleX(2);
-									shape.setScaleY(2);
-									
-									client.selectUnit(unit);
-								}
-								*/
-							}
-							client.updateDebug("UNIT CLICKED");
-						}
-					});	
-				}
-			}
-		}
-	}
-	
-	public void test()
-	{
-		for(Land land: Game.INSTANCE.getGameState())
-		{					
-			if (land.getUnit() != null)
-			{
-				if (!pane.getChildren().contains(land.getUnit().getShape()))
-				{
-					client.updateDebug("Adding a unit for land " + land.getLandId());
-					
-					Unit unit = land.getUnit();
-					Shape shape = unit.getShape();
-					
-					pane.getChildren().add(shape);
-					
 					shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
 						public void handle(MouseEvent e) {
-							if (shape instanceof Circle)
+							if (shape.getScaleX() == 2)
 							{
-								if (((Circle) shape).getRadius() == 20.0)
-								{
-									((Circle) shape).setRadius(10.0);
-									client.deselectUnit(unit);
-								}
-								else
-								{
-									((Circle) shape).setRadius(20.0); 
-									client.selectUnit(unit);
-								}
+								shape.setScaleX(1);
+								shape.setScaleY(1);
+								client.deselectUnit(unit);
+								client.updateDebug("UNIT DESELECTED - SHRINK");
+								// unitGroup.getChildren().remove(shape); // one way of removing a unit marker, need reference to it though.
 							}
-							client.updateDebug("UNIT CLICKED");
+							else
+							{
+								deselectAllUnits();
+								shape.setScaleX(2);
+								shape.setScaleY(2);
+								client.selectUnit(unit);
+								client.updateDebug("UNIT SELECTED - ENLARGE");
+							}
+
 						}
 					});	
 				}
 			}
 		}
 	}
-	
+
+	public void deselectAllUnits()
+	{
+		Iterator<Node> iterator = unitGroup.getChildren().iterator();
+		while (iterator.hasNext()) {
+			Node next = iterator.next();
+			next.setScaleX(1);
+			next.setScaleY(1);
+		}
+	}
+
 }
