@@ -1,8 +1,11 @@
 package com.websocketgame.clientSide;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -24,6 +27,7 @@ public class GamePane {
 	private ScrollPane scrollPane;
 	private Slider slider;
 	private Client client;
+	private Group unitGroup;
 	
 	public GamePane(Client client)
 	{
@@ -72,6 +76,8 @@ public class GamePane {
 
 		scrollPane = new ScrollPane(zoomPane);				
 		scrollPane.setMinWidth(540);
+		
+		unitGroup = new Group();
 	}
 	
 	public ScrollPane getGamePane()
@@ -88,6 +94,80 @@ public class GamePane {
 	{
 		// Better than before, but need to remove old unit / shape?
 		System.out.println("Refreshing Display");
+		for(Land land: Game.INSTANCE.getGameState())
+		{					
+			if (land.getUnit() != null)
+			{
+				if (!unitGroup.getChildren().contains(land.getUnit().getShape()))
+				{
+					client.updateDebug("Adding a unit for land " + land.getLandId());
+					
+					Unit unit = land.getUnit();
+					Shape shape = unit.getShape();
+								
+					// Using Group to try and get a handle on these shapes to resize all (when a unit is selected, deselect all others)
+					unitGroup.getChildren().add(shape); 
+					
+					// Need to remove every time to prevent duplicate child error...
+					pane.getChildren().removeAll(unitGroup);
+					pane.getChildren().add(unitGroup);
+					
+					shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+						public void handle(MouseEvent e) {
+							if (shape instanceof Circle)
+							{
+								if (shape.getScaleX() == 2)
+								{
+									shape.setScaleX(1);
+									shape.setScaleY(1);
+									client.deselectUnit(unit);
+								}
+								else
+								{
+									// Moves all units down and right, could use to offset more than one unit per land?
+									//unitGroup.setTranslateX(10);
+									//unitGroup.setTranslateY(10);
+									
+									// shrink all other units to indicate deselection when a new unit is selected.
+									Iterator<Node> iterator = unitGroup.getChildren().iterator();
+					                  while (iterator.hasNext()) {
+					                    Node next = iterator.next();
+					                    next.setScaleX(1);
+					                    next.setScaleY(1);
+					                  }
+
+									shape.setScaleX(2);
+									shape.setScaleY(2);
+									client.selectUnit(unit);
+								}
+									
+								/*if (((Circle) shape).getRadius() == 20.0)
+								{
+									((Circle) shape).setRadius(10.0);
+									client.deselectUnit(unit);
+								}
+								else
+								{
+									((Circle) shape).setRadius(20.0); 
+									// unitGroup.setScaleX(1);
+									
+									shape.setScaleX(2);
+									shape.setScaleY(2);
+									
+									client.selectUnit(unit);
+								}
+								*/
+							}
+							client.updateDebug("UNIT CLICKED");
+						}
+					});	
+				}
+			}
+		}
+	}
+	
+	public void test()
+	{
 		for(Land land: Game.INSTANCE.getGameState())
 		{					
 			if (land.getUnit() != null)

@@ -1,3 +1,4 @@
+/*
 package Units;
 
 import com.websocketgame.shared.Land;
@@ -21,3 +22,4 @@ public class Footman extends AbstractUnit {
 		return text;
 	}
 }
+*/

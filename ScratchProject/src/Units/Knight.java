@@ -1,3 +1,4 @@
+/*
 package Units;
 
 import javafx.scene.text.Text;
@@ -21,3 +22,4 @@ public class Knight extends AbstractUnit {
 		return text;
 	}
 }
+*/

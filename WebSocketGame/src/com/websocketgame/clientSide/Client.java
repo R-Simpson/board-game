@@ -36,10 +36,10 @@ import com.websocketgame.shared.Unit;
 
 public class Client extends Application {
 
-	static Socket socket;
-	static ObjectInputStream in;
-	static ObjectOutputStream out;
-	static int playerid;
+	Socket socket;
+	ObjectInputStream in;
+	ObjectOutputStream out;
+	int playerid;
 	private Pane pane;
 	private ChatPane chatPane;
 	
@@ -132,7 +132,7 @@ public class Client extends Application {
 		this.selectedUnit = null;
 		updateDebug("Unselected land " + unit.getLand().getLandId());
 	}
-	
+		
 	public Unit getSelectedUnit()
 	{
 		return selectedUnit;
