@@ -50,13 +50,14 @@ public class Client extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		// Initialise chat pane
+		// Initialise chat pane here so we can write connection debug statements to it
 		chatPane = new ChatPane();
 		chatPane.setDebug(true);
 		
 		// Connect to server
 		updateDebug("Connecting...");
 		try {	
+			// Localhost for testing, client should be able to enter IP, port, password
 			socket = new Socket("localhost",7777);
 			updateDebug("Connected");
 
@@ -66,22 +67,26 @@ public class Client extends Application {
 			// Set up output stream
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
-
+			
+			// READ #1
+			// Read player ID assigned, should make this a client choice from those left available
 			playerid = in.readInt();
 			updateDebug("Assigned Player Id : " + playerid);
 
+			// READ #2
 			// Load GameState from Server
 			Game.INSTANCE.setGameState((List<Land>) in.readObject());
 			updateDebug("Set gameState as defined by server");
+			
+			// Initialise game pane now that GameState is loaded from server
+			gamePane = new GamePane(this);
 
+			// Start the input thread listening for messages from the server
 			Input input = new Input(in, this);
 			Thread inputThread = new Thread(input);
 			inputThread.setDaemon(true); // set 'true' so thread will terminate when closing stage / game window
 			inputThread.start();
-			
-			// Initialise game pane now that GameState is loaded
-			gamePane = new GamePane(this);
-	
+
 			// Refresh display to show units on the board
 			refreshDisplay();
 			

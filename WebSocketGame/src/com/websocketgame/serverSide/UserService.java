@@ -26,6 +26,8 @@ public class UserService implements Runnable {
 
 	public void run() 
 	{
+		// WRITE #1
+		// Assigning player id
 		System.out.println("Writing playerId to client");
 		try {
 			this.out.writeInt(pid);
@@ -35,6 +37,8 @@ public class UserService implements Runnable {
 			e1.printStackTrace();
 		}
 
+		// WRITE #2
+		// Sending current gamestate
 		System.out.println("Writing gameState to client");
 		try {
 			this.out.writeObject(Game.INSTANCE.getGameState());
@@ -44,7 +48,7 @@ public class UserService implements Runnable {
 			e1.printStackTrace();
 		}
 
-
+		// Loop until server shutdown, listen for input from Client, validate and send back updates
 		while(true)
 		{
 			try {
