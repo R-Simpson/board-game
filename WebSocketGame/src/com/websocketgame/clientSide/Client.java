@@ -42,15 +42,18 @@ public class Client extends Application {
 	static int playerid;
 	private Pane pane;
 	private ChatPane chatPane;
+	
+	private GamePane gamePane;
+	
 	private Unit selectedUnit;
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		pane = new Pane();
+		// Initialise chat pane
 		chatPane = new ChatPane();
 		chatPane.setDebug(true);
-
+		
 		// Connect to server
 		updateDebug("Connecting...");
 		try {	
@@ -67,63 +70,22 @@ public class Client extends Application {
 			playerid = in.readInt();
 			updateDebug("Assigned Player Id : " + playerid);
 
+			// Load GameState from Server
 			Game.INSTANCE.setGameState((List<Land>) in.readObject());
-
 			updateDebug("Set gameState as defined by server");
 
 			Input input = new Input(in, this);
 			Thread inputThread = new Thread(input);
-			inputThread.setDaemon(true); // so thread will terminate when closing stage
+			inputThread.setDaemon(true); // set 'true' so thread will terminate when closing stage / game window
 			inputThread.start();
-
-			// Move following to GamePane class?
-			Image image = new Image("file:res/got.jpg");
-	        ImageView iv1 = new ImageView();
-	        iv1.setImage(image);
-	        pane.getChildren().add(iv1);
 			
-			for(Land land: Game.INSTANCE.getGameState())
-			{	
-				pane.getChildren().add(land.getPolygon());
-				
-
-				
-				land.getPolygon().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-					public void handle(MouseEvent e) {
-						
-						if (selectedUnit != null)
-						{
-							try {
-								PlayerMessage message = new PlayerMessage(playerid, land.getLandId());					
-								out.writeObject(message);
-								updateDebug("Send message from client " + playerid + " to claim " + land.getLandId() 
-										+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
-
-							} catch (IOException e1) {
-								updateDebug("Unable to send message to server");
-							}
-						}
-						else
-						{
-							updateChat("GAME: Select a unit to move first");
-						}
-
-					}
-				});
-			}
-
-			pane.setStyle("-fx-background-color: teal;");
-		
-	        Slider slider = new Slider(0.36,1,0.36);
-	        ZoomPane zoomPane = new ZoomPane(pane);
-	        zoomPane.zoomFactorProperty().bind(slider.valueProperty());
-	        
-			ScrollPane scrollPane = new ScrollPane(zoomPane);				
-			scrollPane.setMinWidth(540);
-			
+			// Initialise game pane now that GameState is loaded
+			gamePane = new GamePane(this);
+	
+			// Refresh display to show units on the board
 			refreshDisplay();
 			
-	        stage.setScene(new Scene(new BorderPane(scrollPane, slider, chatPane.getChatPane(), null, null)));
+	        stage.setScene(new Scene(new BorderPane(gamePane.getGamePane(), gamePane.getSlider(), chatPane.getChatPane(), null, null)));
 	        stage.setMinWidth(1040);
 	        stage.setMinHeight(500);	        
 	        stage.setWidth(1040);
@@ -141,42 +103,7 @@ public class Client extends Application {
 	
 	void refreshDisplay()	// package private
 	{
-		// Better than before, but need to remove old unit / shape?
-		System.out.println("Refreshing Display");
-		for(Land land: Game.INSTANCE.getGameState())
-		{					
-			if (land.getUnit() != null)
-			{
-				if (!pane.getChildren().contains(land.getUnit().getShape()))
-				{
-					updateDebug("Adding a unit for land " + land.getLandId());
-					
-					Unit unit = land.getUnit();
-					Shape shape = unit.getShape();
-					
-					pane.getChildren().add(shape);
-					
-					shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
-						public void handle(MouseEvent e) {
-							if (shape instanceof Circle)
-							{
-								if (((Circle) shape).getRadius() == 20.0)
-								{
-									((Circle) shape).setRadius(10.0);
-									deselectUnit(unit);
-								}
-								else
-								{
-									((Circle) shape).setRadius(20.0); 
-									selectUnit(unit);
-								}
-							}
-							updateDebug("UNIT CLICKED");
-						}
-					});	
-				}
-			}
-		}
+		gamePane.refreshDisplay();
 	}
 
 	void updateChat(String text)
