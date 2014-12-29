@@ -12,27 +12,14 @@ public class Server {
 
 	static ServerSocket serverSocket;
 	static UserService[] user = new UserService[6];
-	
+
 	public static void main(String[] args) throws Exception
 	{
 		serverSocket = new ServerSocket(7777);
 		System.out.println("Server Started...");
-		
-		// set starting units - move this to it's own method or class
-		for(Land land: Game.INSTANCE.getGameState())
-		{
-			if (land.getLandId() == 0)
-			{
-				land.addUnit(new Unit(1,1, land));
-				System.out.println("Adding unit 1,1 to land 1");	
-			}
-			if (land.getLandId() == 5)
-			{
-				land.addUnit(new Unit(2,2, land));
-				System.out.println("Adding unit 2,2 to land 8");
-			}
-		}
-			
+
+		setUpGamePieces();
+
 		while(true)
 		{
 			Socket socket = serverSocket.accept();
@@ -47,6 +34,67 @@ public class Server {
 					break;
 				}
 			}
+		}
+	}
+
+	static void setUpGamePieces(){
+		
+		for(Land land : Game.INSTANCE.getGameState()){
+			switch (land.getLandId()){
+			case 2:
+				land.setColor("BLUE");
+				land.addUnit(new Unit(0,2,land));
+				break;
+			case 4:
+				land.setColor("BLUE");
+				land.addUnit(new Unit(0,1,land));
+				break;
+
+			case 15:
+				land.setColor("RED");
+				land.addUnit(new Unit(1,2,land));
+				break;
+			case 16:
+				land.setColor("RED");
+				land.addUnit(new Unit(1,1,land));
+				break;
+
+			case 36:
+				land.setColor("YELLOW");
+				land.addUnit(new Unit(2,2,land));
+				break;
+			case 24:
+				land.setColor("YELLOW");
+				land.addUnit(new Unit(2,1,land));
+				break;
+
+			case 35:
+				land.setColor("PURPLE");
+				land.addUnit(new Unit(3,2,land));
+				break;
+			case 7:
+				land.setColor("PURPLE");
+				land.addUnit(new Unit(3,1,land));
+				break;
+
+			case 22:
+				land.setColor("GREEN");
+				land.addUnit(new Unit(4,2,land));
+				break;
+			case 26:
+				land.setColor("GREEN");
+				land.addUnit(new Unit(4,1,land));
+				break;
+
+			case 32:
+				land.setColor("DARKORANGE");
+				land.addUnit(new Unit(5,2,land));
+				break;
+			case 34:
+				land.setColor("DARKORANGE");
+				land.addUnit(new Unit(5,1,land));
+				break;
+			}	
 		}
 	}
 }

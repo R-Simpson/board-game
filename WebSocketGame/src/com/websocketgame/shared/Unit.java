@@ -34,6 +34,7 @@ public class Unit implements Serializable {
 			circle.setCenterY(land.getCentroid()[1]);					
 			circle.setRadius(10.0);
 			circle.setStroke(Color.BLACK);
+			circle.setStrokeType(StrokeType.OUTSIDE);
 			this.shape = circle;
 		}
 		else if (type==2)
@@ -44,27 +45,28 @@ public class Unit implements Serializable {
 			square.setWidth(20.0);
 			square.setHeight(20.0);
 			square.setStroke(Color.BLACK);
+			square.setStrokeType(StrokeType.OUTSIDE);
 			this.shape = square;
 		}
 
 		switch (owner){
 		case 0:
-			this.shape.setFill(Color.RED);
+			this.shape.setFill(Color.BLUE);
 			break;
 		case 1:
-			this.shape.setFill(Color.BLUE);
+			this.shape.setFill(Color.RED);
 			break;
 		case 2:
 			this.shape.setFill(Color.YELLOW);
 			break;
 		case 3:
-			this.shape.setFill(Color.GREEN);
+			this.shape.setFill(Color.PURPLE);
 			break;
 		case 4:
-			this.shape.setFill(Color.GREY);
+			this.shape.setFill(Color.GREEN);
 			break;
 		case 5:
-			this.shape.setFill(Color.PURPLE);
+			this.shape.setFill(Color.DARKORANGE);
 			break;
 		}
 	}

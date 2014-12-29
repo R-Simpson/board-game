@@ -46,13 +46,13 @@ public enum Game {
 			if(land.getLandId() ==  area)
 				switch (pid){
 				case 0:
-					land.setColor("RED");
+					land.setColor("BLUE");
 					land.addUnit(new Unit(pid,1,land));
 					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 1:
-					land.setColor("BLUE");
+					land.setColor("RED");
 					land.addUnit(new Unit(pid,1,land));
 					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
@@ -64,19 +64,19 @@ public enum Game {
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 3:
-					land.setColor("GREEN");
+					land.setColor("PURPLE");
 					land.addUnit(new Unit(pid,1,land));
 					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 4:
-					land.setColor("BLACK");
+					land.setColor("GREEN");
 					land.addUnit(new Unit(pid,1,land));
 					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
 					break;
 				case 5:
-					land.setColor("PURPLE");
+					land.setColor("DARKORANGE");
 					land.addUnit(new Unit(pid,1,land));
 					System.out.println("Added unit " + pid + ",1 to land " + land.getLandId());
 					System.out.println("Land " + land.getLandId() + " claimed by player " + pid);
