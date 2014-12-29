@@ -121,10 +121,16 @@ public class Client extends Application {
 		chatPane.writeDebug(string);
 	}
 	
-	public void selectUnit(Unit unit)
+	public boolean selectUnit(Unit unit)
 	{
-		this.selectedUnit = unit;
-		updateDebug("Selected unit at land " + unit.getLand().getLandId());
+		boolean validSelection = false;
+		if (unit.getOwner() == playerid)
+		{
+			this.selectedUnit = unit;	
+			updateDebug("Selected unit at land " + unit.getLand().getLandId());
+			validSelection = true;
+		}
+		return validSelection;
 	}
 	
 	public void deselectUnit(Unit unit)

@@ -68,6 +68,7 @@ public class GamePane {
 								client.updateDebug("Send message from client " + client.playerid + " to claim " + land.getLandId() 
 										+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
 
+								deselectAllUnits();
 							} catch (IOException e1) {
 								client.updateDebug("Unable to send message to server");
 							}
@@ -134,19 +135,26 @@ public class GamePane {
 						public void handle(MouseEvent e) {
 							if (shape.getScaleX() == 2)
 							{
+								client.deselectUnit(unit);
 								shape.setScaleX(1);
 								shape.setScaleY(1);
-								client.deselectUnit(unit);
 								client.updateDebug("UNIT DESELECTED - SHRINK");
 								// unitGroup.getChildren().remove(shape); // one way of removing a unit marker, need reference to it though.
 							}
 							else
 							{
-								deselectAllUnits();
-								shape.setScaleX(2);
-								shape.setScaleY(2);
-								client.selectUnit(unit);
-								client.updateDebug("UNIT SELECTED - ENLARGE");
+								boolean selected = client.selectUnit(unit);
+								if (selected)
+								{
+									deselectAllUnits();
+									shape.setScaleX(2);
+									shape.setScaleY(2);
+									client.updateDebug("UNIT SELECTED - ENLARGE");
+								}
+								else
+								{
+									client.updateChat("GAME: Can't select opponents units");
+								}
 							}
 
 						}

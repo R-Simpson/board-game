@@ -71,18 +71,28 @@ public class Unit implements Serializable {
 		}
 	}
 
-	public Shape getShape() {
-		return shape;
-	}
-
 	public Unit getUnit()
 	{
 		return this;
 	}
 	
+	public int getType()
+	{
+		return type;
+	}
+	
+	public int getOwner()
+	{
+		return owner;
+	}
+	
 	public Land getLand()
 	{
 		return land;
+	}
+	
+	public Shape getShape() {
+		return shape;
 	}
 
 	private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
