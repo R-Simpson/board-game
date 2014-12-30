@@ -107,6 +107,9 @@ public class GamePane {
 
 	void refreshDisplay()	// package private
 	{
+		// When a move is made I think a second listener is being added for pre-existing units, then a third etc - so it will select/unselect, 
+		// then select/unselect/select etc.
+		
 		System.out.println("Refreshing Display");
 
 		pane.getChildren().remove(unitGroup);
@@ -127,13 +130,11 @@ public class GamePane {
 					// Using Group to try and get a handle on these shapes to resize all (when a unit is selected, deselect all others)
 					unitGroup.getChildren().add(shape); 
 
-
-
-
 					shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
 						public void handle(MouseEvent e) {
 							if (shape.getScaleX() == 2)
 							{
+								client.updateDebug("Scale of unit is " + shape.getScaleX());
 								client.deselectUnit(unit);
 								shape.setScaleX(1);
 								shape.setScaleY(1);
@@ -141,7 +142,9 @@ public class GamePane {
 							}
 							else
 							{
+								client.updateDebug("Scale of unit is " + shape.getScaleX());
 								boolean selected = client.selectUnit(unit);
+								client.updateDebug("client.selectUnit() returned unit at " + unit.getLand().getLandId());
 								if (selected)
 								{
 									deselectAllUnits();

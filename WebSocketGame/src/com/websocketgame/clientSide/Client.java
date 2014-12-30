@@ -8,7 +8,6 @@ import java.util.List;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import com.websocketgame.shared.Game;
@@ -21,7 +20,7 @@ public class Client extends Application {
 	ObjectInputStream in;
 	ObjectOutputStream out;
 	int playerid;
-	private Pane pane;
+	// private Pane pane;
 	private ChatPane chatPane;
 	
 	private GamePane gamePane;
