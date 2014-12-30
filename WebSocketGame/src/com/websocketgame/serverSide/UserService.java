@@ -64,7 +64,7 @@ public class UserService implements Runnable {
 
 				if (message.getPlayerId() == Game.INSTANCE.getPlayerTurn())
 				{
-					Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
+					Game.INSTANCE.updateGameState(message.getPlayerId(), message.getUnitMoved(), message.getPlayerOrder());
 					int playerTurn = Game.INSTANCE.nextPlayerTurn();
 					
 					for(int i = 0; i < 6; i++)	// replace '6' with player count set by server on start up
@@ -83,11 +83,11 @@ public class UserService implements Runnable {
 				}
 				else
 				{
-					user[message.getPlayerId()].out.writeObject("GAME: It's not your turn yet, waiting for player " + Game.INSTANCE.getPlayerTurn());
+					user[message.getPlayerId()-1].out.writeObject("GAME: It's not your turn yet, waiting for player " + Game.INSTANCE.getPlayerTurn());
 				}
 
 			} catch (IOException e) {
-				user[pid] = null;
+				user[pid-1] = null;
 				System.out.println("Player " + pid + " disconnected");
 				break;
 			} catch (ClassNotFoundException e) {

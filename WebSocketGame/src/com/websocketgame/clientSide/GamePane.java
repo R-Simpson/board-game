@@ -12,8 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import com.websocketgame.shared.Game;
@@ -58,17 +56,17 @@ public class GamePane {
 							}
 						}
 
-
 						if (adjacent)
 						{
 							try {
-								PlayerMessage message = new PlayerMessage(client.playerid, land.getLandId());					
-								client.out.writeObject(message);
+								PlayerMessage message = new PlayerMessage(client.playerid, client.getSelectedUnit(), land.getLandId());	
 
+								client.out.writeObject(message);
+								client.updateDebug("Selected unit at " + client.getSelectedUnit().getLand().getLandId());
 								client.updateDebug("Send message from client " + client.playerid + " to claim " + land.getLandId() 
 										+ ", centroid: " + land.getCentroid()[0] + "," + land.getCentroid()[1] );
-
 								deselectAllUnits();
+								
 							} catch (IOException e1) {
 								client.updateDebug("Unable to send message to server");
 							}
@@ -95,8 +93,6 @@ public class GamePane {
 
 		scrollPane = new ScrollPane(zoomPane);				
 		scrollPane.setMinWidth(540);
-
-		unitGroup = new Group();
 	}
 
 	public ScrollPane getGamePane()
@@ -111,12 +107,16 @@ public class GamePane {
 
 	void refreshDisplay()	// package private
 	{
-		// Better than before, but need to remove old unit / shape?
 		System.out.println("Refreshing Display");
+
+		pane.getChildren().remove(unitGroup);
+		unitGroup = new Group();
+		
 		for(Land land: Game.INSTANCE.getGameState())
-		{					
+		{			
 			if (land.getUnit() != null)
 			{
+				client.updateDebug("HEYYYY, unit found for land " + land.getLandId());
 				if (!unitGroup.getChildren().contains(land.getUnit().getShape()))
 				{
 					client.updateDebug("Adding a unit for land " + land.getLandId());
@@ -127,9 +127,8 @@ public class GamePane {
 					// Using Group to try and get a handle on these shapes to resize all (when a unit is selected, deselect all others)
 					unitGroup.getChildren().add(shape); 
 
-					// Need to remove every time to prevent duplicate child error...
-					pane.getChildren().removeAll(unitGroup);
-					pane.getChildren().add(unitGroup);
+
+
 
 					shape.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
 						public void handle(MouseEvent e) {
@@ -139,7 +138,6 @@ public class GamePane {
 								shape.setScaleX(1);
 								shape.setScaleY(1);
 								client.updateDebug("UNIT DESELECTED - SHRINK");
-								// unitGroup.getChildren().remove(shape); // one way of removing a unit marker, need reference to it though.
 							}
 							else
 							{
@@ -161,7 +159,15 @@ public class GamePane {
 					});	
 				}
 			}
+			else	// land.getUnit() == null
+			{
+					// no unit exists to use as a reference for unitGroup.getChildren().remove()
+			}
 		}
+		
+		// Need to remove every time to prevent duplicate child error...
+		pane.getChildren().removeAll(unitGroup);
+		pane.getChildren().add(unitGroup);
 	}
 
 	public void deselectAllUnits()

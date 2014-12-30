@@ -6,7 +6,6 @@ import java.io.ObjectInputStream;
 import javafx.application.Platform;
 
 import com.websocketgame.shared.Game;
-import com.websocketgame.shared.Land;
 import com.websocketgame.shared.PlayerMessage;
 
 public class Input implements Runnable{
@@ -35,7 +34,7 @@ public class Input implements Runnable{
 					Platform.runLater(new Runnable() {	// GUI updates MUST be run on the JavaFX thread - run at 'some unspecified time in the future'
 						@Override
 						public void run() {
-							Game.INSTANCE.updateGameState(message.getPlayerId(), message.getPlayerOrder());
+							Game.INSTANCE.updateGameState(message.getPlayerId(), message.getUnitMoved(), message.getPlayerOrder());
 							client.refreshDisplay();
 						}
 					});				

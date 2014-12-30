@@ -3,10 +3,11 @@ package com.websocketgame.shared;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeType;
 
 public class Unit implements Serializable {
 
@@ -27,7 +28,7 @@ public class Unit implements Serializable {
 
 	private void setUpShape(int owner, int type, Land land)
 	{
-		if (type==1)
+		if (type==1)	// Footman, weaker unit type, represented by a circle
 		{
 			Circle circle = new Circle();
 			circle.setCenterX(land.getCentroid()[0]);
@@ -37,7 +38,7 @@ public class Unit implements Serializable {
 			circle.setStrokeType(StrokeType.OUTSIDE);
 			this.shape = circle;
 		}
-		else if (type==2)
+		else if (type==2) // Knight, stronger unit typ, represented by a square
 		{
 			Rectangle square = new Rectangle();
 			square.setLayoutX(land.getCentroid()[0]);
@@ -49,25 +50,15 @@ public class Unit implements Serializable {
 			this.shape = square;
 		}
 
-		switch (owner){
-		case 0:
-			this.shape.setFill(Color.BLUE);
-			break;
-		case 1:
-			this.shape.setFill(Color.RED);
-			break;
-		case 2:
-			this.shape.setFill(Color.YELLOW);
-			break;
-		case 3:
-			this.shape.setFill(Color.PURPLE);
-			break;
-		case 4:
-			this.shape.setFill(Color.GREEN);
-			break;
-		case 5:
-			this.shape.setFill(Color.DARKORANGE);
-			break;
+		switch (owner)
+		{
+			case 0:	this.shape.setFill(Color.WHITE); 		break;
+			case 1:	this.shape.setFill(Color.BLUE); 		break;
+			case 2:	this.shape.setFill(Color.RED);			break;
+			case 3:	this.shape.setFill(Color.YELLOW);		break;
+			case 4:	this.shape.setFill(Color.PURPLE);		break;
+			case 5:	this.shape.setFill(Color.GREEN);		break;
+			case 6:	this.shape.setFill(Color.DARKORANGE);	break;
 		}
 	}
 
@@ -94,7 +85,7 @@ public class Unit implements Serializable {
 	public Shape getShape() {
 		return shape;
 	}
-
+	
 	private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
 		stream.writeInt(owner);
 		stream.writeInt(type);

@@ -14,22 +14,26 @@ public class Land implements Serializable {
 	private static final long serialVersionUID = 0;
 
 	private int id;
-	private String color;
+	private int owner;
+	//private String color;
 	private Double[] boundaries;
 	private Double[] centroid;
 	private int[] adjacentLands;
 	private Unit unit;
+	private ArrayList units;
 	private transient Polygon polygon = new Polygon();
 	
-	public Land(int id, String color, Double[] boundaries, int[] adjacentLands)
+	public Land(int id, Double[] boundaries, int[] adjacentLands)
 	{
 		this.id = id;
-		this.color = color;
+		this.owner = 0;
+//		this.color = "WHITE";
 		this.boundaries = boundaries;
 		this.unit = null;
+		this.units = new ArrayList<Unit>();
 		this.centroid = calculateCentroid(boundaries);
 		this.adjacentLands = adjacentLands;
-		this.polygon = setUpPolygon(color, boundaries);
+		this.polygon = setUpPolygon(getColor(), boundaries);
 	}
 	
 	public int getLandId()
@@ -37,14 +41,42 @@ public class Land implements Serializable {
 		return this.id;
 	}
 	
-	public String getColor()
+	public int getOwner()
 	{
-		return color;
+		return this.owner;
+	}
+	
+	public void setOwner(int owner)
+	{
+		this.owner = owner;
+		switch (owner){
+		case 0: setColor("WHITE");		break;
+		case 1:	setColor("BLUE"); 		break;
+		case 2:	setColor("RED");		break;
+		case 3:	setColor("YELLOW");		break;
+		case 4:	setColor("BLACK");		break;
+		case 5:	setColor("GREEN");		break;
+		case 6:	setColor("DARKORANGE");	break;
+		}
 	}
 	
 	public void setColor(String color) {
-		this.color = color;
+		//this.color = color;
 		this.polygon.setFill(Color.valueOf(color).deriveColor(1, 1, 1, 0.2));
+	}
+	
+	public String getColor()
+	{
+		switch (owner){
+		case 0: return("WHITE");
+		case 1:	return("BLUE"); 
+		case 2:	return("RED");
+		case 3:	return("YELLOW");
+		case 4:	return("BLACK");
+		case 5:	return("GREEN");
+		case 6:	return("DARKORANGE");
+		}
+		return("WHITE");
 	}
 	
 	public Double[] getLandBounds()
@@ -79,12 +111,14 @@ public class Land implements Serializable {
 	
 	public void addUnit(Unit unit)
 	{
+		//units.add(unit);
 		this.unit = unit;
 	}
 	
-	public void removeUnit()
+	public void removeUnit(Unit unit)
 	{
 		this.unit = null;
+		//units.remove(unit);
 	}
 	
 	public Double[] calculateCentroid(Double[] boundaries)
@@ -120,23 +154,25 @@ public class Land implements Serializable {
 	
     private void writeObject(java.io.ObjectOutputStream stream) throws IOException {
     	stream.writeInt(id);
-    	stream.writeObject(color);
+    	stream.writeInt(owner);
+//    	stream.writeObject(color);
     	stream.writeObject(boundaries);
     	stream.writeObject(centroid);
     	stream.writeObject(adjacentLands);
     	stream.writeObject(unit);
-    	System.out.println("Writing land " + id + ", color " + color);
+//    	System.out.println("Writing land " + id + ", color " + color);
     }
 	
     private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException {
 		// how does default readObject work? Does it call constructor? 
     	this.id = stream.readInt();
-    	this.color = (String) stream.readObject();
+    	this.owner = stream.readInt();
+//    	this.color = (String) stream.readObject();
     	this.boundaries = (Double[]) stream.readObject();
 		this.centroid = (Double[]) stream.readObject();
 		this.adjacentLands = (int[]) stream.readObject();
 		this.unit = (Unit) stream.readObject();
-		this.polygon = setUpPolygon(color, boundaries); // set up Polygon (transient) from boundaries & colour
-		System.out.println("Reading land " + id + ", color " + color);
+		this.polygon = setUpPolygon(getColor(), boundaries); // set up Polygon (transient) from boundaries & colour
+//		System.out.println("Reading land " + id + ", color " + color);
 	}    
 }

@@ -1,5 +1,7 @@
-package com.websocketgame.shared;
+package scratch;
 /*
+package com.websocketgame.shared;
+
 package com.websocketgame.socketTest;
 
 import java.io.Serializable;
