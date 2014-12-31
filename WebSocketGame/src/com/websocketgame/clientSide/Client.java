@@ -3,6 +3,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
@@ -19,19 +20,19 @@ public class Client extends Application {
 	Socket socket;
 	ObjectInputStream in;
 	ObjectOutputStream out;
-	int playerid;
-	// private Pane pane;
+	private int playerid;
+	private String playerName;
 	private ChatPane chatPane;
-	
 	private GamePane gamePane;
-	
 	private Unit selectedUnit;
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		
+		setPlayerName("NewPlayer");
+		
 		// Initialise chat pane here so we can write connection debug statements to it
-		chatPane = new ChatPane();
+		chatPane = new ChatPane(this);
 		chatPane.setDebug(true);
 		
 		// Connect to server
@@ -48,6 +49,12 @@ public class Client extends Application {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 			
+			// READ #0
+			// Read array of available playerId
+			// Would need to separate pid (userService[pid]) from player id (which family you want to play as)
+			// Fix chat first, then this
+			// ArrayList<Integer> availablePlayerIds = new ArrayList<Integer>();
+
 			// READ #1
 			// Read player ID assigned, should make this a client choice from those left available
 			playerid = in.readInt();
@@ -91,16 +98,20 @@ public class Client extends Application {
 		gamePane.refreshDisplay();
 	}
 
-	void updateChat(String text)
-	{
-		chatPane.writeToChatPane(text);
+	public int getPlayerId() {
+		return playerid;
+	}
+	public void setPlayerId(int playerid) {
+		this.playerid = playerid;
 	}
 	
-	void updateDebug(String string)
-	{
-		chatPane.writeDebug(string);
+	public String getPlayerName() {
+		return playerName;
 	}
-	
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
+
 	public boolean selectUnit(Unit unit)
 	{
 		boolean validSelection = false;
@@ -112,17 +123,27 @@ public class Client extends Application {
 		}
 		return validSelection;
 	}
-	
+	public Unit getSelectedUnit()
+	{
+		return selectedUnit;
+	}
 	public void deselectUnit(Unit unit)
 	{
 		this.selectedUnit = null;
 		updateDebug("Deselected unit at land " + unit.getLand().getLandId());
 	}
-		
-	public Unit getSelectedUnit()
+	
+	void updateChat(String text)
 	{
-		return selectedUnit;
+		chatPane.writeToChatPane(text);
 	}
+	
+	void updateDebug(String string)
+	{
+		chatPane.writeDebug(string);
+	}
+	
+	
 	
 }
 

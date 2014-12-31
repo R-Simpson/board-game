@@ -19,19 +19,41 @@ public class Land implements Serializable {
 	private Double[] boundaries;
 	private Double[] centroid;
 	private int[] adjacentLands;
+	private boolean castle;
+	private boolean fort;
+	private int crowns;
+	private int supply;	
 	private Unit unit;
-	private ArrayList units;
+	// private ArrayList units;
 	private transient Polygon polygon = new Polygon();
 	
-	public Land(int id, Double[] boundaries, int[] adjacentLands)
+	public Land(int id, Double[] boundaries, int[] adjacentLands, boolean castle, boolean fort, int crowns, int supply)
+	{
+		this.id = id;
+		this.owner = 0;
+//		this.color = "WHITE";
+		this.boundaries = boundaries;
+		this.centroid = calculateCentroid(boundaries);
+		this.adjacentLands = adjacentLands;	
+		this.castle = castle;
+		this.fort = fort;
+		this.crowns = crowns;
+		this.supply = supply;
+		this.unit = null;
+		//this.units = new ArrayList<Unit>();
+		this.polygon = setUpPolygon(getColor(), boundaries);
+	}
+	
+	// Constructor for custom centroids
+	public Land(int id, Double[] boundaries, int[] adjacentLands, Double[] centroid, boolean castle, boolean fort, int crowns, int supply)
 	{
 		this.id = id;
 		this.owner = 0;
 //		this.color = "WHITE";
 		this.boundaries = boundaries;
 		this.unit = null;
-		this.units = new ArrayList<Unit>();
-		this.centroid = calculateCentroid(boundaries);
+		//this.units = new ArrayList<Unit>();
+		this.centroid = centroid;
 		this.adjacentLands = adjacentLands;
 		this.polygon = setUpPolygon(getColor(), boundaries);
 	}
@@ -93,6 +115,20 @@ public class Land implements Serializable {
 	{
 		return adjacentLands;
 	}
+	
+	public boolean hasCastle() {
+		return castle;
+	}
+	public boolean hasFort() {
+		return fort;
+	}
+	public int getCrowns() {
+		return crowns;
+	}
+	public int getSupply() {
+		return supply;
+	}
+	
 	
 	public Polygon getPolygon()
 	{
@@ -174,5 +210,6 @@ public class Land implements Serializable {
 		this.unit = (Unit) stream.readObject();
 		this.polygon = setUpPolygon(getColor(), boundaries); // set up Polygon (transient) from boundaries & colour
 //		System.out.println("Reading land " + id + ", color " + color);
-	}    
+	}
+
 }

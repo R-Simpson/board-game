@@ -1,5 +1,7 @@
 package com.websocketgame.clientSide;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -10,6 +12,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import com.websocketgame.messaging.ChatMessage;
+
 public class ChatPane {
 	
 	private StackPane stackPane;
@@ -17,7 +21,7 @@ public class ChatPane {
 	private TextArea textArea;
 	private boolean debug = false;
 	
-	public ChatPane()
+	public ChatPane(Client client)
 	{
 		
 	stackPane = new StackPane();
@@ -42,16 +46,30 @@ public class ChatPane {
 	sendButton.setOnAction(new EventHandler<ActionEvent>(){
 		@Override
 		public void handle(ActionEvent arg0) {
-
-			if (textField.getLength() > 0)
+			
+			if (textField.getLength() > 6 && textField.getText(0, 6).toLowerCase().equals("/name "))
 			{
-				textArea.appendText(textField.getText() + "\n");
+				client.setPlayerName(textField.getText().substring(6));
+				textField.clear();
+				writeToChatPane("You have changed your name to " + client.getPlayerName());
+			}
+			else if (textField.getLength() > 0)
+			{
+				ChatMessage message = new ChatMessage(client.getPlayerId(), client.getPlayerName(), textField.getText());	
+				try {
+					client.out.writeObject(message);
+				} catch (IOException e1) {
+					client.updateDebug("Unable to send message to server");
+				}
 				textField.clear();
 			}
 		}
 	});
 	
-	stackPane.getChildren().add(vbox);		
+	stackPane.getChildren().add(vbox);	
+	
+	writeToChatPane("Welcome! Use '/name' to change your name");
+	
 	}
 	
 	public StackPane getChatPane()

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeType;
+
+import com.websocketgame.gamePieces.GamePieceFootman;
+import com.websocketgame.gamePieces.GamePieceKnight;
 
 public class Unit implements Serializable {
 
@@ -30,24 +30,11 @@ public class Unit implements Serializable {
 	{
 		if (type==1)	// Footman, weaker unit type, represented by a circle
 		{
-			Circle circle = new Circle();
-			circle.setCenterX(land.getCentroid()[0]);
-			circle.setCenterY(land.getCentroid()[1]);					
-			circle.setRadius(10.0);
-			circle.setStroke(Color.BLACK);
-			circle.setStrokeType(StrokeType.OUTSIDE);
-			this.shape = circle;
+			this.shape = new GamePieceFootman(this);
 		}
 		else if (type==2) // Knight, stronger unit typ, represented by a square
 		{
-			Rectangle square = new Rectangle();
-			square.setLayoutX(land.getCentroid()[0]);
-			square.setLayoutY(land.getCentroid()[1]);
-			square.setWidth(20.0);
-			square.setHeight(20.0);
-			square.setStroke(Color.BLACK);
-			square.setStrokeType(StrokeType.OUTSIDE);
-			this.shape = square;
+			this.shape = new GamePieceKnight(this);
 		}
 
 		switch (owner)

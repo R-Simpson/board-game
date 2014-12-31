@@ -5,8 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import com.websocketgame.messaging.ChatMessage;
+import com.websocketgame.messaging.GameMessage;
 import com.websocketgame.shared.Game;
-import com.websocketgame.shared.PlayerMessage;
 
 
 public class UserService implements Runnable {
@@ -53,19 +54,43 @@ public class UserService implements Runnable {
 		{
 			try {
 
-				PlayerMessage message = null;
-
 				Object object = in.readObject();
 
-				if (object instanceof PlayerMessage)
+				if (object instanceof GameMessage)
 				{
-					message = (PlayerMessage)object;
-				}
+					GameMessage message = (GameMessage)object;
 
-				if (message.getPlayerId() == Game.INSTANCE.getPlayerTurn())
+					if (message.getPlayerId() == Game.INSTANCE.getPlayerTurn())
+					{
+									
+						Game.INSTANCE.updateGameState(message.getPlayerId(), message.getUnitMoved(), message.getPlayerOrder());
+						int playerTurn = Game.INSTANCE.nextPlayerTurn();
+
+						for(int i = 0; i < 6; i++)	// replace '6' with player count set by server on start up
+						{
+							if(user[i] != null)
+							{
+								// create new message from game state and send back, don't just parrot playerMessage
+								// user[i].out.writeObject(message);
+								
+								// write updated gamestate, handle on client end...
+								user[i].out.writeObject(Game.INSTANCE.getGameState());
+								user[i].out.flush();
+
+								user[i].out.writeObject("GAME: It is now player " + playerTurn + "'s turn");
+
+								System.out.println("Updated game value and sent back to client " + i);
+							}
+						}
+					}
+					else
+					{
+						user[message.getPlayerId()-1].out.writeObject("GAME: It's not your turn yet, waiting for player " + Game.INSTANCE.getPlayerTurn());
+					}
+				}
+				else if (object instanceof ChatMessage)
 				{
-					Game.INSTANCE.updateGameState(message.getPlayerId(), message.getUnitMoved(), message.getPlayerOrder());
-					int playerTurn = Game.INSTANCE.nextPlayerTurn();
+					ChatMessage message = (ChatMessage)object;
 					
 					for(int i = 0; i < 6; i++)	// replace '6' with player count set by server on start up
 					{
@@ -74,24 +99,15 @@ public class UserService implements Runnable {
 							// create new message from game state and send back, don't just parrot playerMessage
 							user[i].out.writeObject(message);
 							user[i].out.flush();
-							
-							user[i].out.writeObject("GAME: It is now player " + playerTurn + "'s turn");
-							
-							System.out.println("Updated game value and sent back to client " + i);
 						}
 					}
 				}
-				else
-				{
-					user[message.getPlayerId()-1].out.writeObject("GAME: It's not your turn yet, waiting for player " + Game.INSTANCE.getPlayerTurn());
-				}
-
 			} catch (IOException e) {
 				user[pid-1] = null;
 				System.out.println("Player " + pid + " disconnected");
 				break;
 			} catch (ClassNotFoundException e) {
-				System.out.println("Object received was not PlayerMessage");
+				System.out.println("Object received was not of expected type");
 				break;
 			}
 		}
