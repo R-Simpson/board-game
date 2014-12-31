@@ -71,10 +71,11 @@ public class UserService implements Runnable {
 							if(user[i] != null)
 							{
 								// create new message from game state and send back, don't just parrot playerMessage
-								// user[i].out.writeObject(message);
+								user[i].out.writeObject(message);
 								
 								// write updated gamestate, handle on client end...
-								user[i].out.writeObject(Game.INSTANCE.getGameState());
+								//user[i].out.writeObject(Game.INSTANCE.getGameState());
+								
 								user[i].out.flush();
 
 								user[i].out.writeObject("GAME: It is now player " + playerTurn + "'s turn");
